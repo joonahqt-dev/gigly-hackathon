@@ -3,227 +3,759 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Gigly — Creator Marketplace</title>
+<title>Gigly — Where Young Creators Get Booked</title>
+<meta name="description" content="A creator gig marketplace. Post gigs, browse services, and book creators." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
+  /* =========================================================
+     DESIGN TOKENS
+     ========================================================= */
   :root {
-    --bg: #0f1117;
-    --panel: #171a23;
-    --panel-2: #1f232e;
-    --border: #2a2f3d;
-    --text: #e8ecf3;
-    --muted: #8b93a7;
+    --bg: #0a0b0f;
+    --bg-soft: #101219;
+    --panel: #16181f;
+    --panel-2: #1c1f28;
+    --panel-3: #232733;
+    --border: #262b38;
+    --border-soft: #1e222c;
+
+    --text: #eef1f7;
+    --text-dim: #a3abbd;
+    --muted: #6f7789;
+
     --accent: #7c5cff;
     --accent-2: #a78bfa;
+    --accent-3: #c4b5fd;
+    --accent-glow: rgba(124, 92, 255, 0.35);
+
     --green: #22c55e;
-    --yellow: #eab308;
+    --green-soft: rgba(34, 197, 94, 0.12);
+    --yellow: #facc15;
+    --yellow-soft: rgba(250, 204, 21, 0.12);
     --red: #ef4444;
-    --radius: 12px;
+    --red-soft: rgba(239, 68, 68, 0.12);
+    --blue: #3b82f6;
+    --pink: #ec4899;
+    --orange: #f97316;
+
+    --radius-sm: 8px;
+    --radius: 14px;
+    --radius-lg: 20px;
+
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.25);
+    --shadow: 0 8px 28px rgba(0,0,0,0.4);
+    --shadow-lg: 0 24px 60px rgba(0,0,0,0.55);
+    --shadow-glow: 0 0 0 1px rgba(124,92,255,0.25), 0 8px 32px rgba(124,92,255,0.15);
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: var(--bg);
     color: var(--text);
-    min-height: 100vh;
-    line-height: 1.5;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(ellipse 800px 400px at 0% 0%, rgba(124,92,255,0.06), transparent 50%),
+      radial-gradient(ellipse 700px 400px at 100% 0%, rgba(236,72,153,0.04), transparent 50%);
+    background-attachment: fixed;
   }
 
-  /* ---------- Layout ---------- */
+  ::selection { background: var(--accent); color: white; }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--panel-3); border-radius: 10px; border: 2px solid var(--bg); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border); }
+
+  /* =========================================================
+     LAYOUT
+     ========================================================= */
   .app { display: flex; flex-direction: column; min-height: 100vh; }
 
+  /* ---------- Topbar ---------- */
   header.topbar {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 28px;
-    background: var(--panel);
-    border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; z-index: 100;
-    flex-wrap: wrap; gap: 12px;
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10, 11, 15, 0.75);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid var(--border-soft);
   }
-  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; }
-  .brand .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
-  .brand span { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .topbar-inner {
+    max-width: 1240px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 20px; padding: 14px 28px;
+  }
 
-  nav.tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 800; font-size: 20px; letter-spacing: -0.02em;
+    cursor: pointer; user-select: none;
+  }
+  .brand-mark {
+    width: 32px; height: 32px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--pink));
+    display: grid; place-items: center;
+    box-shadow: 0 4px 16px var(--accent-glow);
+    position: relative; overflow: hidden;
+  }
+  .brand-mark::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.3));
+  }
+  .brand-mark svg { width: 18px; height: 18px; color: white; position: relative; z-index: 1; }
+  .brand-text {
+    background: linear-gradient(90deg, var(--text), var(--accent-3));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
+  nav.tabs {
+    display: flex; gap: 4px; flex-wrap: wrap;
+    background: var(--panel); padding: 4px; border-radius: 12px;
+    border: 1px solid var(--border-soft);
+  }
   nav.tabs button {
-    background: transparent; color: var(--muted); border: 1px solid transparent;
-    padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 14px;
-    font-weight: 500; transition: all 0.15s;
+    background: transparent; color: var(--text-dim);
+    border: none; padding: 8px 16px; border-radius: 8px;
+    cursor: pointer; font-size: 13.5px; font-weight: 600;
+    font-family: inherit; transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex; align-items: center; gap: 7px; white-space: nowrap;
+    position: relative;
   }
   nav.tabs button:hover { color: var(--text); background: var(--panel-2); }
-  nav.tabs button.active { color: var(--text); background: var(--panel-2); border-color: var(--border); }
+  nav.tabs button.active {
+    color: var(--text);
+    background: var(--panel-3);
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+  nav.tabs button .pill {
+    background: var(--accent); color: white;
+    font-size: 10px; font-weight: 700;
+    padding: 1px 6px; border-radius: 999px; margin-left: 2px;
+  }
 
-  .user-switch { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+  .user-switch {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--panel); padding: 6px 6px 6px 12px; border-radius: 999px;
+    border: 1px solid var(--border-soft);
+  }
+  .user-switch label { font-size: 12px; color: var(--muted); font-weight: 500; }
   .user-switch select {
-    background: var(--panel-2); color: var(--text); border: 1px solid var(--border);
-    padding: 7px 10px; border-radius: 8px; font-size: 13px; cursor: pointer;
+    background: var(--panel-2); color: var(--text);
+    border: 1px solid var(--border); padding: 7px 12px; border-radius: 999px;
+    font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit;
+    outline: none; transition: border 0.15s;
+  }
+  .user-switch select:hover { border-color: var(--accent); }
+  .user-switch select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+  .mobile-menu-btn {
+    display: none; background: var(--panel); border: 1px solid var(--border);
+    color: var(--text); padding: 8px 10px; border-radius: 8px; cursor: pointer;
   }
 
-  main { flex: 1; padding: 28px; max-width: 1200px; width: 100%; margin: 0 auto; }
+  /* ---------- Main ---------- */
+  main {
+    flex: 1; max-width: 1240px; width: 100%;
+    margin: 0 auto; padding: 32px 28px 80px;
+  }
+
   .view { display: none; }
-  .view.active { display: block; animation: fade 0.25s ease; }
-  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-
-  h2.page-title { font-size: 26px; margin-bottom: 4px; }
-  p.page-sub { color: var(--muted); margin-bottom: 24px; font-size: 14px; }
-
-  /* ---------- Cards / Panels ---------- */
-  .panel {
-    background: var(--panel); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 20px;
+  .view.active { display: block; animation: fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
   }
 
-  /* ---------- Forms ---------- */
-  .form-grid { display: grid; gap: 14px; max-width: 620px; }
-  .form-grid label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
-  .form-grid input, .form-grid select, .form-grid textarea {
-    width: 100%; background: var(--panel-2); border: 1px solid var(--border);
-    color: var(--text); padding: 11px 13px; border-radius: 8px; font-size: 14px;
-    font-family: inherit; outline: none; transition: border 0.15s;
+  /* ---------- Page header ---------- */
+  .page-head { margin-bottom: 28px; }
+  .page-head h1 {
+    font-size: 32px; font-weight: 800; letter-spacing: -0.025em;
+    line-height: 1.15; margin-bottom: 6px;
   }
-  .form-grid input:focus, .form-grid select:focus, .form-grid textarea:focus { border-color: var(--accent); }
-  .form-grid textarea { resize: vertical; min-height: 90px; }
-
-  .btn {
-    border: none; padding: 11px 18px; border-radius: 8px; font-size: 14px;
-    font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s;
-    display: inline-flex; align-items: center; gap: 6px; justify-content: center;
+  .page-head p { color: var(--text-dim); font-size: 14.5px; max-width: 620px; }
+  .page-head .grad {
+    background: linear-gradient(90deg, var(--accent-2), var(--pink));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .btn-primary { background: var(--accent); color: white; }
-  .btn-primary:hover { background: var(--accent-2); }
-  .btn-ghost { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); }
-  .btn-ghost:hover { border-color: var(--accent); }
-  .btn-success { background: var(--green); color: #04220f; }
-  .btn-success:hover { filter: brightness(1.1); }
-  .btn-danger { background: transparent; color: var(--red); border: 1px solid var(--red); }
-  .btn-danger:hover { background: rgba(239,68,68,0.1); }
-  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .btn-sm { padding: 7px 12px; font-size: 13px; }
 
-  /* ---------- Marketplace ---------- */
-  .filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-  .filters input { flex: 1; min-width: 200px; background: var(--panel); border: 1px solid var(--border); color: var(--text); padding: 11px 14px; border-radius: 8px; font-size: 14px; outline: none; }
-  .filters input:focus { border-color: var(--accent); }
-  .filters select { background: var(--panel); border: 1px solid var(--border); color: var(--text); padding: 11px 14px; border-radius: 8px; font-size: 14px; cursor: pointer; outline: none; }
-  .filters select:focus { border-color: var(--accent); }
+  /* =========================================================
+     HERO STATS (marketplace)
+     ========================================================= */
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px; margin-bottom: 26px;
+  }
+  .hero-stat {
+    background: linear-gradient(180deg, var(--panel), var(--bg-soft));
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius); padding: 16px 18px;
+    position: relative; overflow: hidden;
+  }
+  .hero-stat::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0.6;
+  }
+  .hero-stat .num { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+  .hero-stat .lbl {
+    font-size: 11.5px; color: var(--muted); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px;
+  }
 
-  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  /* =========================================================
+     FILTERS
+     ========================================================= */
+  .filters {
+    display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .search-wrap { flex: 1; min-width: 240px; position: relative; }
+  .search-wrap svg {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; color: var(--muted); pointer-events: none;
+  }
+  .search-wrap input {
+    width: 100%; padding: 13px 16px 13px 42px;
+    background: var(--panel); border: 1px solid var(--border-soft);
+    color: var(--text); border-radius: 12px; font-size: 14.5px;
+    font-family: inherit; outline: none; transition: all 0.18s;
+  }
+  .search-wrap input::placeholder { color: var(--muted); }
+  .search-wrap input:focus {
+    border-color: var(--accent); background: var(--panel-2);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+  }
+  .search-wrap .kbd {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: var(--panel-3); color: var(--muted);
+    font-size: 11px; font-weight: 600; padding: 3px 7px; border-radius: 5px;
+    border: 1px solid var(--border); pointer-events: none;
+    font-family: ui-monospace, monospace;
+  }
+  .search-wrap input:focus ~ .kbd { display: none; }
+
+  .filters select {
+    background: var(--panel); border: 1px solid var(--border-soft);
+    color: var(--text); padding: 13px 16px; border-radius: 12px;
+    font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit;
+    outline: none; transition: all 0.15s;
+  }
+  .filters select:hover { border-color: var(--accent); }
+  .filters select:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
+
+  .chips {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px;
+  }
   .chip {
-    padding: 6px 14px; border-radius: 999px; background: var(--panel);
-    border: 1px solid var(--border); color: var(--muted); font-size: 13px;
-    cursor: pointer; transition: all 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px; border-radius: 999px;
+    background: var(--panel); border: 1px solid var(--border-soft);
+    color: var(--text-dim); font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all 0.18s; font-family: inherit;
+    user-select: none;
   }
-  .chip:hover { color: var(--text); }
-  .chip.active { background: var(--accent); color: white; border-color: var(--accent); }
+  .chip:hover { color: var(--text); border-color: var(--border); background: var(--panel-2); }
+  .chip.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white; border-color: transparent;
+    box-shadow: 0 4px 14px var(--accent-glow);
+  }
+  .chip .count {
+    background: rgba(0,0,0,0.25); padding: 1px 7px; border-radius: 999px;
+    font-size: 11px; font-weight: 700;
+  }
+  .chip.active .count { background: rgba(255,255,255,0.25); }
 
-  .gig-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+  /* =========================================================
+     GIG GRID
+     ========================================================= */
+  .gig-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 18px;
+  }
   .gig-card {
-    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 18px; display: flex; flex-direction: column; gap: 10px;
-    transition: all 0.15s; position: relative;
+    background: var(--panel);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    animation: cardIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
   }
-  .gig-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-  .gig-card .cat-badge {
-    display: inline-block; background: rgba(124,92,255,0.15); color: var(--accent-2);
-    font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px;
-    text-transform: uppercase; letter-spacing: 0.5px; width: fit-content;
+  .gig-card:nth-child(1) { animation-delay: 0.02s; }
+  .gig-card:nth-child(2) { animation-delay: 0.04s; }
+  .gig-card:nth-child(3) { animation-delay: 0.06s; }
+  .gig-card:nth-child(4) { animation-delay: 0.08s; }
+  .gig-card:nth-child(5) { animation-delay: 0.10s; }
+  .gig-card:nth-child(6) { animation-delay: 0.12s; }
+  .gig-card:nth-child(n+7) { animation-delay: 0.14s; }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.98); }
+    to { opacity: 1; transform: none; }
   }
-  .gig-card h3 { font-size: 16px; line-height: 1.35; }
-  .gig-card .desc { color: var(--muted); font-size: 13px; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-  .gig-card .footer { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
-  .gig-card .rate { font-weight: 700; color: var(--green); font-size: 16px; }
-  .gig-card .creator { font-size: 12px; color: var(--muted); }
+  .gig-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg), 0 0 0 1px var(--accent-glow);
+  }
 
-  .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
-  .empty .big { font-size: 44px; margin-bottom: 12px; opacity: 0.5; }
+  .gig-cover {
+    height: 120px; position: relative; overflow: hidden;
+    display: grid; place-items: center;
+  }
+  .gig-cover .cover-cat {
+    position: relative; z-index: 1;
+    font-size: 40px; font-weight: 800;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    letter-spacing: -0.03em;
+  }
+  .gig-cover::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.15), transparent 60%);
+  }
+  .gig-cover .badge {
+    position: absolute; top: 12px; right: 12px; z-index: 2;
+    font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em;
+    padding: 4px 10px; border-radius: 999px; text-transform: uppercase;
+    backdrop-filter: blur(8px);
+  }
+  .badge.rising {
+    background: rgba(255,255,255,0.15); color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+  .badge.hot {
+    background: rgba(249, 115, 22, 0.9); color: white;
+  }
 
-  /* ---------- Booking list ---------- */
+  .gig-body { padding: 18px; display: flex; flex-direction: column; flex: 1; gap: 10px; }
+  .gig-cat {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--accent-2);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .gig-cat::before {
+    content: ''; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 8px var(--accent);
+  }
+  .gig-card h3 {
+    font-size: 15.5px; font-weight: 700; line-height: 1.35;
+    letter-spacing: -0.01em; color: var(--text);
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .gig-card .desc {
+    font-size: 13px; color: var(--text-dim); line-height: 1.5;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden; flex: 1;
+  }
+
+  .gig-creator {
+    display: flex; align-items: center; gap: 9px;
+    padding-top: 12px; border-top: 1px solid var(--border-soft);
+  }
+  .avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: grid; place-items: center;
+    font-size: 11px; font-weight: 700; color: white;
+    flex-shrink: 0;
+    box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.15);
+  }
+  .avatar.lg { width: 38px; height: 38px; font-size: 13px; }
+  .gig-creator .meta { flex: 1; min-width: 0; }
+  .gig-creator .name { font-size: 13px; font-weight: 600; }
+  .gig-creator .time { font-size: 11.5px; color: var(--muted); }
+
+  .gig-footer {
+    padding: 14px 18px;
+    border-top: 1px solid var(--border-soft);
+    background: rgba(0,0,0,0.15);
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .price {
+    display: flex; flex-direction: column;
+  }
+  .price .amt {
+    font-size: 19px; font-weight: 800; letter-spacing: -0.02em;
+    color: var(--green);
+  }
+  .price .per { font-size: 11px; color: var(--muted); font-weight: 500; }
+
+  /* =========================================================
+     BUTTONS
+     ========================================================= */
+  .btn {
+    border: none; padding: 11px 18px; border-radius: 10px;
+    font-size: 13.5px; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    white-space: nowrap; user-select: none;
+  }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn:active:not(:disabled) { transform: scale(0.97); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: white;
+    box-shadow: 0 4px 14px var(--accent-glow);
+  }
+  .btn-primary:hover:not(:disabled) {
+    box-shadow: 0 8px 24px var(--accent-glow);
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    background: var(--panel-2); color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover:not(:disabled) { background: var(--panel-3); border-color: var(--accent); }
+
+  .btn-success {
+    background: linear-gradient(135deg, var(--green), #16a34a); color: white;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+  }
+  .btn-success:hover:not(:disabled) { box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4); }
+
+  .btn-danger {
+    background: transparent; color: var(--red);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+  }
+  .btn-danger:hover:not(:disabled) { background: var(--red-soft); border-color: var(--red); }
+
+  .btn-sm { padding: 8px 14px; font-size: 12.5px; border-radius: 8px; }
+  .btn-lg { padding: 14px 24px; font-size: 15px; border-radius: 12px; }
+
+  /* =========================================================
+     FORMS
+     ========================================================= */
+  .panel {
+    background: var(--panel); border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg); padding: 26px;
+    box-shadow: var(--shadow-sm);
+  }
+  .panel-narrow { max-width: 640px; }
+
+  .form-grid { display: grid; gap: 18px; }
+  .field { display: grid; gap: 7px; }
+  .field label {
+    font-size: 13px; font-weight: 600; color: var(--text-dim);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .field label .req { color: var(--accent-2); }
+
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 12px 14px;
+    background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text); border-radius: 10px;
+    font-size: 14px; font-family: inherit; outline: none;
+    transition: all 0.18s;
+  }
+  .field textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
+  .field input::placeholder, .field textarea::placeholder { color: var(--muted); }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--accent); background: var(--panel-3);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+  }
+  .field .hint { font-size: 12px; color: var(--muted); }
+
+  .input-prefix { position: relative; }
+  .input-prefix .prefix {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-weight: 600; font-size: 14px; pointer-events: none;
+  }
+  .input-prefix input { padding-left: 32px; }
+
+  /* =========================================================
+     BOOKING LIST (creator dashboard + my bookings)
+     ========================================================= */
+  .stats-row {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px; margin-bottom: 26px;
+  }
+  .stat-card {
+    background: linear-gradient(180deg, var(--panel), var(--bg-soft));
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius); padding: 18px;
+    position: relative; overflow: hidden;
+  }
+  .stat-card .stat-num {
+    font-size: 26px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1;
+  }
+  .stat-card .stat-lbl {
+    font-size: 11.5px; color: var(--muted); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px;
+  }
+  .stat-card.green .stat-num { color: var(--green); }
+  .stat-card.yellow .stat-num { color: var(--yellow); }
+  .stat-card.purple .stat-num { color: var(--accent-2); }
+
   .booking-list { display: flex; flex-direction: column; gap: 12px; }
   .booking-card {
-    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 16px 18px; display: flex; gap: 16px; align-items: flex-start;
-    justify-content: space-between; flex-wrap: wrap;
+    background: var(--panel); border: 1px solid var(--border-soft);
+    border-radius: var(--radius); padding: 18px;
+    display: flex; gap: 16px; align-items: flex-start; justify-content: space-between;
+    flex-wrap: wrap;
+    transition: all 0.18s;
+    animation: fadeUp 0.3s ease backwards;
   }
-  .booking-card .info { flex: 1; min-width: 220px; }
-  .booking-card .info h4 { font-size: 15px; margin-bottom: 4px; }
-  .booking-card .info .meta { font-size: 13px; color: var(--muted); }
-  .booking-card .info .msg { font-size: 13px; color: var(--muted); margin-top: 6px; font-style: italic; border-left: 2px solid var(--border); padding-left: 10px; }
-  .booking-card .actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .booking-card:hover { border-color: var(--border); background: var(--panel-2); }
 
+  .booking-main { flex: 1; min-width: 240px; display: flex; gap: 14px; }
+  .booking-main .info { flex: 1; min-width: 0; }
+  .booking-main h4 {
+    font-size: 15px; font-weight: 700; margin-bottom: 4px;
+    letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .booking-main .meta {
+    font-size: 12.5px; color: var(--muted);
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .booking-main .meta .dot { color: var(--border); }
+  .booking-main .msg {
+    font-size: 13px; color: var(--text-dim); margin-top: 8px;
+    padding: 8px 12px; background: var(--panel-2); border-radius: 8px;
+    border-left: 3px solid var(--accent);
+    font-style: italic; line-height: 1.5;
+  }
+  .booking-main .reason {
+    font-size: 12.5px; color: var(--red); margin-top: 8px;
+    padding: 8px 12px; background: var(--red-soft); border-radius: 8px;
+    border-left: 3px solid var(--red);
+  }
+
+  .booking-actions {
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  }
+
+  /* Status pill */
   .status {
-    font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 999px;
-    text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.05em;
+    padding: 5px 12px; border-radius: 999px; text-transform: uppercase;
+    white-space: nowrap;
   }
-  .status.pending { background: rgba(234,179,8,0.15); color: var(--yellow); }
-  .status.accepted { background: rgba(34,197,94,0.15); color: var(--green); }
-  .status.declined { background: rgba(239,68,68,0.15); color: var(--red); }
+  .status::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor; box-shadow: 0 0 8px currentColor;
+  }
+  .status.pending { background: var(--yellow-soft); color: var(--yellow); }
+  .status.accepted { background: var(--green-soft); color: var(--green); }
+  .status.declined { background: var(--red-soft); color: var(--red); }
 
-  /* ---------- Modal ---------- */
+  /* =========================================================
+     EMPTY STATE
+     ========================================================= */
+  .empty {
+    text-align: center; padding: 64px 24px;
+    background: var(--panel); border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .empty .icon {
+    width: 64px; height: 64px; margin: 0 auto 16px;
+    display: grid; place-items: center;
+    background: var(--panel-2); border-radius: 50%;
+    font-size: 30px;
+  }
+  .empty h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+  .empty p { color: var(--muted); font-size: 13.5px; max-width: 380px; margin: 0 auto 18px; }
+
+  /* =========================================================
+     MODAL
+     ========================================================= */
   .modal-backdrop {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
-    display: flex; align-items: center; justify-content: center; z-index: 200;
-    padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    position: fixed; inset: 0;
+    background: rgba(5, 6, 10, 0.7);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 200; padding: 20px;
+    opacity: 0; pointer-events: none; transition: opacity 0.22s;
   }
   .modal-backdrop.open { opacity: 1; pointer-events: auto; }
   .modal {
-    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 24px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
-    transform: scale(0.96); transition: transform 0.2s;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px; width: 100%; max-width: 500px;
+    max-height: 90vh; overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.94) translateY(10px);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
   }
-  .modal-backdrop.open .modal { transform: scale(1); }
-  .modal h3 { margin-bottom: 6px; font-size: 19px; }
-  .modal .sub { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
-  .modal .form-grid { max-width: 100%; }
+  .modal-backdrop.open .modal { transform: scale(1) translateY(0); }
 
-  /* ---------- Confirmation toast ---------- */
+  .modal h3 {
+    font-size: 20px; font-weight: 700; letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .modal .sub { color: var(--muted); font-size: 13.5px; margin-bottom: 22px; }
+
+  .modal-close {
+    position: absolute; top: 16px; right: 16px;
+    background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--muted); width: 30px; height: 30px;
+    border-radius: 8px; cursor: pointer;
+    display: grid; place-items: center;
+    transition: all 0.15s;
+  }
+  .modal-close:hover { color: var(--text); border-color: var(--red); background: var(--red-soft); }
+
+  .modal-actions { display: flex; gap: 10px; margin-top: 4px; flex-wrap: wrap; }
+
+  /* Booking summary in modal */
+  .booking-summary {
+    background: var(--panel-2); border-radius: 12px;
+    padding: 14px; margin-bottom: 18px;
+    border: 1px solid var(--border-soft);
+  }
+  .booking-summary .row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 5px 0; font-size: 13px;
+  }
+  .booking-summary .row:not(:last-child) { border-bottom: 1px solid var(--border-soft); }
+  .booking-summary .k { color: var(--muted); font-weight: 500; }
+  .booking-summary .v { font-weight: 600; text-align: right; }
+
+  /* Confirmation */
+  .confirm-modal { text-align: center; padding: 40px 28px 32px; }
+  .confirm-icon {
+    width: 72px; height: 72px; margin: 0 auto 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--green-soft), rgba(34,197,94,0.02));
+    border: 2px solid var(--green);
+    display: grid; place-items: center;
+    font-size: 34px;
+    animation: pop 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+  @keyframes pop {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .confirm-modal h3 { font-size: 22px; margin-bottom: 8px; }
+  .confirm-modal p { color: var(--text-dim); font-size: 14px; margin-bottom: 24px; line-height: 1.55; }
+  .confirm-modal .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+  /* =========================================================
+     TOAST
+     ========================================================= */
   .toast {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
-    background: var(--panel); border: 1px solid var(--green); color: var(--text);
-    padding: 14px 22px; border-radius: 10px; font-size: 14px; font-weight: 500;
-    z-index: 300; transition: transform 0.3s ease; display: flex; align-items: center; gap: 10px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    position: fixed; bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    background: var(--panel-2); border: 1px solid var(--border);
+    color: var(--text); padding: 14px 20px; border-radius: 12px;
+    font-size: 13.5px; font-weight: 500;
+    z-index: 300; display: flex; align-items: center; gap: 10px;
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    max-width: 90vw;
   }
   .toast.show { transform: translateX(-50%) translateY(0); }
-  .toast .check { color: var(--green); font-weight: 700; }
+  .toast .toast-icon {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: grid; place-items: center; flex-shrink: 0;
+    font-size: 12px; font-weight: 700;
+  }
+  .toast.success .toast-icon { background: var(--green-soft); color: var(--green); }
+  .toast.error .toast-icon { background: var(--red-soft); color: var(--red); }
+  .toast.info .toast-icon { background: var(--accent-glow); color: var(--accent-2); }
 
-  /* ---------- Stats row ---------- */
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
-  .stat { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
-  .stat .num { font-size: 22px; font-weight: 700; }
-  .stat .lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  /* =========================================================
+     RESPONSIVE
+     ========================================================= */
+  @media (max-width: 860px) {
+    .topbar-inner { padding: 12px 16px; flex-wrap: wrap; }
+    nav.tabs { order: 3; width: 100%; overflow-x: auto; }
+    nav.tabs button { padding: 8px 12px; font-size: 13px; }
+    .user-switch label { display: none; }
+    main { padding: 22px 16px 60px; }
+    .page-head h1 { font-size: 24px; }
+    .gig-grid { grid-template-columns: 1fr; }
+    .panel { padding: 20px; }
+    .modal { padding: 22px; }
+  }
 
-  @media (max-width: 640px) {
-    main { padding: 16px; }
-    header.topbar { padding: 12px 16px; }
-    .brand { font-size: 17px; }
+  @media (max-width: 480px) {
+    .hero-stat .num { font-size: 20px; }
+    .stat-card .stat-num { font-size: 22px; }
+    .booking-actions { width: 100%; justify-content: flex-end; }
+  }
+
+  /* Accessibility */
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 </style>
 </head>
 <body>
 <div class="app">
 
+  <!-- ======================= TOPBAR ======================= -->
   <header class="topbar">
-    <div class="brand"><div class="dot"></div><span>Gigly</span></div>
-    <nav class="tabs" id="tabs">
-      <button data-view="marketplace" class="active">Marketplace</button>
-      <button data-view="post">Post a Gig</button>
-      <button data-view="dashboard">Creator Dashboard</button>
-      <button data-view="bookings">My Bookings</button>
-    </nav>
-    <div class="user-switch">
-      <label for="userSelect">Acting as</label>
-      <select id="userSelect"></select>
+    <div class="topbar-inner">
+      <div class="brand" id="brandHome">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2 L15 8 L22 9 L17 14 L18 21 L12 18 L6 21 L7 14 L2 9 L9 8 Z"/>
+          </svg>
+        </div>
+        <div class="brand-text">Gigly</div>
+      </div>
+
+      <nav class="tabs" id="tabs">
+        <button data-view="marketplace" class="active">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Marketplace
+        </button>
+        <button data-view="post">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          Post a Gig
+        </button>
+        <button data-view="dashboard">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+          Dashboard
+          <span class="pill" id="pendingBadge" style="display:none;">0</span>
+        </button>
+        <button data-view="bookings">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 7 9 18l-5-5"/></svg>
+          My Bookings
+        </button>
+      </nav>
+
+      <div class="user-switch">
+        <label for="userSelect">Acting as</label>
+        <select id="userSelect"></select>
+      </div>
     </div>
   </header>
 
+  <!-- ======================= MAIN ======================= -->
   <main>
 
     <!-- ============ MARKETPLACE ============ -->
     <section class="view active" id="view-marketplace">
-      <h2 class="page-title">Marketplace</h2>
-      <p class="page-sub">Discover young creators offering their skills.</p>
+      <div class="page-head">
+        <h1>Find a <span class="grad">creator</span>, get it done.</h1>
+        <p>Young creators offering design, code, writing, video, music and more. Search, filter, book in seconds.</p>
+      </div>
+
+      <div class="hero-stats" id="heroStats"></div>
 
       <div class="filters">
-        <input id="searchInput" type="text" placeholder="🔍 Search gigs by title or description…" />
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input id="searchInput" type="text" placeholder="Search gigs by title, description or category…" autocomplete="off" />
+          <span class="kbd">/</span>
+        </div>
         <select id="sortSelect">
           <option value="newest">Newest first</option>
           <option value="rate-asc">Price: Low → High</option>
@@ -232,116 +764,161 @@
       </div>
 
       <div class="chips" id="categoryChips"></div>
+
       <div class="gig-grid" id="gigGrid"></div>
     </section>
 
     <!-- ============ POST A GIG ============ -->
     <section class="view" id="view-post">
-      <h2 class="page-title">Post a Gig</h2>
-      <p class="page-sub">List a service you offer. Clients will find and book you.</p>
+      <div class="page-head">
+        <h1>Post a new gig</h1>
+        <p>List a service you offer. Keep it clear — clients book faster when they know exactly what they get.</p>
+      </div>
 
-      <div class="panel">
-        <form class="form-grid" id="gigForm">
-          <div>
-            <label for="gTitle">Gig title</label>
-            <input id="gTitle" type="text" placeholder="e.g. I will design a modern logo" required />
+      <div class="panel panel-narrow">
+        <form class="form-grid" id="gigForm" autocomplete="off">
+          <div class="field">
+            <label for="gTitle">Gig title <span class="req">*</span></label>
+            <input id="gTitle" type="text" placeholder="e.g. I will design a modern logo" required maxlength="100" />
+            <span class="hint">Start with "I will…" — it converts better.</span>
           </div>
-          <div>
-            <label for="gCategory">Category</label>
+
+          <div class="field">
+            <label for="gCategory">Category <span class="req">*</span></label>
             <select id="gCategory" required></select>
           </div>
-          <div>
-            <label for="gRate">Rate (₹)</label>
-            <input id="gRate" type="number" min="1" placeholder="1500" required />
+
+          <div class="field">
+            <label for="gRate">Rate <span class="req">*</span></label>
+            <div class="input-prefix">
+              <span class="prefix">₹</span>
+              <input id="gRate" type="number" min="1" max="1000000" step="1" placeholder="1500" required />
+            </div>
+            <span class="hint">Total project price. You can negotiate later.</span>
           </div>
-          <div>
-            <label for="gDesc">Description</label>
-            <textarea id="gDesc" placeholder="Describe what you'll deliver, your process, and turnaround time…" required></textarea>
+
+          <div class="field">
+            <label for="gDesc">Description <span class="req">*</span></label>
+            <textarea id="gDesc" placeholder="What you'll deliver, your process, revisions, turnaround time…" required maxlength="500"></textarea>
+            <span class="hint"><span id="descCount">0</span>/500 characters</span>
           </div>
-          <button type="submit" class="btn btn-primary" style="width: fit-content;">Publish Gig</button>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: fit-content; margin-top: 4px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            Publish Gig
+          </button>
         </form>
       </div>
     </section>
 
     <!-- ============ CREATOR DASHBOARD ============ -->
     <section class="view" id="view-dashboard">
-      <h2 class="page-title">Creator Dashboard</h2>
-      <p class="page-sub">Your incoming booking requests.</p>
+      <div class="page-head">
+        <h1>Creator Dashboard</h1>
+        <p>Incoming booking requests for your gigs. Accept or decline — you're in control.</p>
+      </div>
 
-      <div class="stats" id="creatorStats"></div>
+      <div class="stats-row" id="creatorStats"></div>
       <div class="booking-list" id="incomingBookings"></div>
     </section>
 
     <!-- ============ MY BOOKINGS ============ -->
     <section class="view" id="view-bookings">
-      <h2 class="page-title">My Bookings</h2>
-      <p class="page-sub">Track the status of the gigs you've requested.</p>
+      <div class="page-head">
+        <h1>My Bookings</h1>
+        <p>Every gig you've requested, with live status from the creator.</p>
+      </div>
       <div class="booking-list" id="myBookings"></div>
     </section>
 
   </main>
 </div>
 
-<!-- ============ BOOKING MODAL ============ -->
+<!-- ======================= BOOKING MODAL ======================= -->
 <div class="modal-backdrop" id="bookingModal">
   <div class="modal">
-    <h3 id="modalGigTitle">Book this gig</h3>
-    <p class="sub" id="modalGigMeta"></p>
-    <form class="form-grid" id="bookingForm">
+    <button class="modal-close" data-close-modal aria-label="Close">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <h3>Book this gig</h3>
+    <p class="sub">Send a request — the creator will accept or decline.</p>
+
+    <div class="booking-summary" id="modalSummary"></div>
+
+    <form class="form-grid" id="bookingForm" autocomplete="off">
       <input type="hidden" id="modalGigId" />
-      <div>
-        <label for="bName">Your name</label>
-        <input id="bName" type="text" required />
+      <div class="field">
+        <label for="bName">Your name <span class="req">*</span></label>
+        <input id="bName" type="text" required maxlength="60" placeholder="Priya Sharma" />
       </div>
-      <div>
-        <label for="bMessage">Message to the creator</label>
-        <textarea id="bMessage" placeholder="Briefly describe what you need…" required></textarea>
+      <div class="field">
+        <label for="bMessage">Message to the creator <span class="req">*</span></label>
+        <textarea id="bMessage" required maxlength="400" placeholder="Briefly describe what you need, deadline, references…"></textarea>
+        <span class="hint"><span id="msgCount">0</span>/400 characters</span>
       </div>
-      <div style="display:flex; gap:10px;">
-        <button type="submit" class="btn btn-primary">Send Booking Request</button>
-        <button type="button" class="btn btn-ghost" id="modalCancel">Cancel</button>
+      <div class="modal-actions">
+        <button type="submit" class="btn btn-primary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+          Send Booking Request
+        </button>
+        <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
       </div>
     </form>
   </div>
 </div>
 
-<!-- ============ CONFIRMATION MODAL ============ -->
+<!-- ======================= CONFIRMATION MODAL ======================= -->
 <div class="modal-backdrop" id="confirmModal">
-  <div class="modal" style="text-align:center;">
-    <div style="font-size: 52px; margin-bottom: 10px;">✅</div>
+  <div class="modal confirm-modal" style="max-width: 440px;">
+    <div class="confirm-icon">✅</div>
     <h3>Booking Request Sent!</h3>
-    <p class="sub" id="confirmText"></p>
-    <div style="display:flex; gap:10px; justify-content:center;">
+    <p id="confirmText"></p>
+    <div class="actions">
       <button class="btn btn-primary" id="confirmViewBookings">View My Bookings</button>
       <button class="btn btn-ghost" id="confirmClose">Keep Browsing</button>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast"><span class="check">✓</span><span id="toastText"></span></div>
+<!-- ======================= TOAST ======================= -->
+<div class="toast" id="toast">
+  <div class="toast-icon" id="toastIcon">✓</div>
+  <span id="toastText"></span>
+</div>
 
 <script>
 /* =========================================================
-   DATA LAYER  —  localStorage-backed store
+   DATA LAYER
    ========================================================= */
-const DB_KEY = 'gigly_db_v1';
+const DB_KEY = 'gigly_db_v2';
 
-const CATEGORIES = ['Design','Development','Writing','Video','Music','Marketing'];
+const CATEGORIES = ['Design', 'Development', 'Writing', 'Video', 'Music', 'Marketing'];
+
+const CATEGORY_GRADIENTS = {
+  Design:      ['#7c5cff', '#ec4899'],
+  Development: ['#3b82f6', '#06b6d4'],
+  Writing:     ['#f97316', '#facc15'],
+  Video:       ['#ec4899', '#f43f5e'],
+  Music:       ['#8b5cf6', '#6366f1'],
+  Marketing:   ['#22c55e', '#16a34a'],
+};
+
+const AVATAR_COLORS = ['#7c5cff', '#ec4899', '#3b82f6', '#f97316', '#22c55e', '#facc15', '#06b6d4', '#8b5cf6'];
 
 const SEED_USERS = [
-  { id: 'u_aarav',  name: 'Aarav (creator)',  role: 'creator' },
-  { id: 'u_priya',  name: 'Priya (client)',   role: 'client'  },
-  { id: 'u_rohan',  name: 'Rohan (client)',   role: 'client'  },
-  { id: 'u_neha',   name: 'Neha (creator)',   role: 'creator' },
+  { id: 'u_aarav', name: 'Aarav Mehta',   role: 'creator' },
+  { id: 'u_priya', name: 'Priya Sharma',  role: 'client'  },
+  { id: 'u_rohan', name: 'Rohan Iyer',    role: 'client'  },
+  { id: 'u_neha',  name: 'Neha Kapoor',   role: 'creator' },
 ];
 
 const SEED_GIGS = [
-  { id: 'g1', creatorId: 'u_aarav', title: 'I will design a modern minimalist logo', category: 'Design', rate: 1500, description: 'Clean, scalable logo with 2 revisions and all source files. Delivered in 3 days.', createdAt: Date.now() - 1000*60*60*2 },
-  { id: 'g2', creatorId: 'u_neha',  title: 'I will build a responsive landing page',   category: 'Development', rate: 3500, description: 'Mobile-first landing page using HTML/CSS/JS. Includes contact form and animations.', createdAt: Date.now() - 1000*60*60*8 },
-  { id: 'g3', creatorId: 'u_aarav', title: 'I will write SEO blog articles (1000 words)', category: 'Writing', rate: 800, description: 'Well-researched, plagiarism-free articles optimised for search engines.', createdAt: Date.now() - 1000*60*60*20 },
-  { id: 'g4', creatorId: 'u_neha',  title: 'I will edit your YouTube video',            category: 'Video', rate: 2000, description: 'Cuts, transitions, colour grading, captions and background music.', createdAt: Date.now() - 1000*60*60*40 },
-  { id: 'g5', creatorId: 'u_aarav', title: 'I will compose original background music',   category: 'Music', rate: 2500, description: 'Custom royalty-free track for your video, podcast or game.', createdAt: Date.now() - 1000*60*60*60 },
-  { id: 'g6', creatorId: 'u_neha',  title: 'I will run your social media ads',           category: 'Marketing', rate: 4000, description: 'Full campaign setup on Instagram and Facebook with audience targeting.', createdAt: Date.now() - 1000*60*60*90 },
+  { id: 'g1', creatorId: 'u_aarav', title: 'I will design a modern minimalist logo', category: 'Design', rate: 1500, description: 'Clean, scalable logo with 2 revisions and all source files (SVG, PNG, AI). Delivered in 3 days.', createdAt: Date.now() - 1000*60*60*2 },
+  { id: 'g2', creatorId: 'u_neha',  title: 'I will build a responsive landing page',   category: 'Development', rate: 3500, description: 'Mobile-first landing page using HTML/CSS/JS. Includes contact form, smooth scroll and animations.', createdAt: Date.now() - 1000*60*60*8 },
+  { id: 'g3', creatorId: 'u_aarav', title: 'I will write SEO blog articles', category: 'Writing', rate: 800, description: 'Well-researched, plagiarism-free 1000-word articles optimised for search engines. Topic of your choice.', createdAt: Date.now() - 1000*60*60*20 },
+  { id: 'g4', creatorId: 'u_neha',  title: 'I will edit your YouTube video', category: 'Video', rate: 2000, description: 'Cuts, transitions, colour grading, captions and background music. Up to 10 minutes of final footage.', createdAt: Date.now() - 1000*60*60*40 },
+  { id: 'g5', creatorId: 'u_aarav', title: 'I will compose original background music', category: 'Music', rate: 2500, description: 'Custom royalty-free track for your video, podcast or game. Any mood, any length up to 3 minutes.', createdAt: Date.now() - 1000*60*60*60 },
+  { id: 'g6', creatorId: 'u_neha',  title: 'I will run your social media ad campaign', category: 'Marketing', rate: 4000, description: 'Full campaign setup on Instagram and Facebook with audience targeting, creative testing and weekly reports.', createdAt: Date.now() - 1000*60*60*90 },
 ];
 
 function loadDB() {
@@ -360,24 +937,53 @@ let CURRENT_USER_ID = DB.users.find(u => u.role === 'creator').id;
 /* =========================================================
    HELPERS
    ========================================================= */
-const $ = sel => document.querySelector(sel);
-const $$ = sel => document.querySelectorAll(sel);
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
 const userById = id => DB.users.find(u => u.id === id);
 const gigById  = id => DB.gigs.find(g => g.id === id);
+
 const fmtMoney = n => '₹' + Number(n).toLocaleString('en-IN');
-const timeAgo = ts => {
+
+function timeAgo(ts) {
   const s = Math.floor((Date.now() - ts) / 1000);
   if (s < 60) return 'just now';
   if (s < 3600) return Math.floor(s/60) + 'm ago';
   if (s < 86400) return Math.floor(s/3600) + 'h ago';
-  return Math.floor(s/86400) + 'd ago';
-};
+  if (s < 604800) return Math.floor(s/86400) + 'd ago';
+  return new Date(ts).toLocaleDateString();
+}
 
-function showToast(msg) {
+function escapeHtml(s) {
+  return String(s ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+function initials(name) {
+  return String(name || '?').trim().split(/\s+/).map(w => w[0]).slice(0,2).join('').toUpperCase();
+}
+
+function colorFor(id) {
+  let h = 0;
+  for (const c of String(id)) h = (h*31 + c.charCodeAt(0)) >>> 0;
+  return AVATAR_COLORS[h % AVATAR_COLORS.length];
+}
+
+function avatarHTML(user, size = '') {
+  if (!user) return `<div class="avatar ${size}" style="background:#333;">?</div>`;
+  const bg = colorFor(user.id);
+  return `<div class="avatar ${size}" style="background:${bg};">${initials(user.name)}</div>`;
+}
+
+function showToast(msg, type = 'success') {
+  const t = $('#toast');
   $('#toastText').textContent = msg;
-  $('#toast').classList.add('show');
+  $('#toastIcon').textContent = type === 'error' ? '!' : type === 'info' ? 'i' : '✓';
+  t.className = 'toast ' + type;
+  t.classList.add('show');
   clearTimeout(showToast._t);
-  showToast._t = setTimeout(() => $('#toast').classList.remove('show'), 2600);
+  showToast._t = setTimeout(() => t.classList.remove('show'), 2800);
 }
 
 /* =========================================================
@@ -385,12 +991,14 @@ function showToast(msg) {
    ========================================================= */
 function go(view) {
   $$('.view').forEach(v => v.classList.remove('active'));
-  $('#view-' + view).classList.add('active');
+  const el = $('#view-' + view);
+  if (el) el.classList.add('active');
   $$('#tabs button').forEach(b => b.classList.toggle('active', b.dataset.view === view));
   if (view === 'marketplace') renderMarketplace();
   if (view === 'dashboard')   renderDashboard();
   if (view === 'bookings')    renderMyBookings();
   if (view === 'post')        renderPostForm();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 $('#tabs').addEventListener('click', e => {
@@ -398,40 +1006,82 @@ $('#tabs').addEventListener('click', e => {
   if (btn) go(btn.dataset.view);
 });
 
+$('#brandHome').addEventListener('click', () => go('marketplace'));
+
 /* =========================================================
    USER SWITCHER
    ========================================================= */
 function renderUserSelect() {
   const sel = $('#userSelect');
-  sel.innerHTML = DB.users.map(u =>
-    `<option value="${u.id}" ${u.id === CURRENT_USER_ID ? 'selected' : ''}>${u.name}</option>`
-  ).join('');
+  sel.innerHTML = DB.users.map(u => {
+    const label = u.name + ' — ' + (u.role === 'creator' ? 'Creator' : 'Client');
+    return `<option value="${u.id}" ${u.id === CURRENT_USER_ID ? 'selected' : ''}>${label}</option>`;
+  }).join('');
 }
 $('#userSelect').addEventListener('change', e => {
   CURRENT_USER_ID = e.target.value;
-  // re-render whatever is visible
-  const active = $('.view.active').id.replace('view-', '');
-  go(active);
+  const activeView = $('.view.active').id.replace('view-', '');
+  go(activeView);
+  renderPendingBadge();
+  showToast(`Now acting as ${userById(CURRENT_USER_ID).name.split(' ')[0]}`, 'info');
 });
+
+function renderPendingBadge() {
+  const user = userById(CURRENT_USER_ID);
+  const badge = $('#pendingBadge');
+  if (!user || user.role !== 'creator') { badge.style.display = 'none'; return; }
+  const myGigIds = DB.gigs.filter(g => g.creatorId === CURRENT_USER_ID).map(g => g.id);
+  const count = DB.bookings.filter(b => myGigIds.includes(b.gigId) && b.status === 'pending').length;
+  if (count > 0) { badge.textContent = count; badge.style.display = 'inline-block'; }
+  else badge.style.display = 'none';
+}
 
 /* =========================================================
    MARKETPLACE
    ========================================================= */
 let state = { search: '', category: 'all', sort: 'newest' };
 
+function renderHeroStats() {
+  const totalGigs = DB.gigs.length;
+  const totalCreators = new Set(DB.gigs.map(g => g.creatorId)).size;
+  const avgRate = totalGigs
+    ? Math.round(DB.gigs.reduce((s, g) => s + g.rate, 0) / totalGigs)
+    : 0;
+  const totalBookings = DB.bookings.length;
+
+  $('#heroStats').innerHTML = `
+    <div class="hero-stat"><div class="num">${totalGigs}</div><div class="lbl">Live gigs</div></div>
+    <div class="hero-stat"><div class="num">${totalCreators}</div><div class="lbl">Creators</div></div>
+    <div class="hero-stat"><div class="num">${fmtMoney(avgRate)}</div><div class="lbl">Avg. price</div></div>
+    <div class="hero-stat"><div class="num">${totalBookings}</div><div class="lbl">Bookings made</div></div>
+  `;
+}
+
 function renderCategoryChips() {
-  const chips = ['all', ...CATEGORIES];
-  $('#categoryChips').innerHTML = chips.map(c => {
+  const counts = {};
+  DB.gigs.forEach(g => counts[g.category] = (counts[g.category] || 0) + 1);
+  const chips = [['all', DB.gigs.length], ...CATEGORIES.map(c => [c, counts[c] || 0])];
+
+  $('#categoryChips').innerHTML = chips.map(([c, n]) => {
     const label = c === 'all' ? 'All' : c;
     const active = state.category === c ? 'active' : '';
-    return `<div class="chip ${active}" data-cat="${c}">${label}</div>`;
+    return `<button class="chip ${active}" data-cat="${c}">${label}<span class="count">${n}</span></button>`;
   }).join('');
+
   $$('#categoryChips .chip').forEach(chip => {
     chip.addEventListener('click', () => {
       state.category = chip.dataset.cat;
       renderMarketplace();
     });
   });
+}
+
+function isRisingCreator(creatorId) {
+  const accepted = DB.bookings.filter(b => {
+    const g = gigById(b.gigId);
+    return g && g.creatorId === creatorId && b.status === 'accepted';
+  }).length;
+  return accepted === 0;
 }
 
 function getVisibleGigs() {
@@ -446,41 +1096,37 @@ function getVisibleGigs() {
     g.category.toLowerCase().includes(q)
   );
 
-  // ---- DP3: Discovery / ranking ----
-  if (state.sort === 'newest')     list.sort((a,b) => b.createdAt - a.createdAt);
-  if (state.sort === 'rate-asc')   list.sort((a,b) => a.rate - b.rate);
-  if (state.sort === 'rate-desc')  list.sort((a,b) => b.rate - a.rate);
+  if (state.sort === 'newest')    list.sort((a,b) => b.createdAt - a.createdAt);
+  if (state.sort === 'rate-asc')  list.sort((a,b) => a.rate - b.rate);
+  if (state.sort === 'rate-desc') list.sort((a,b) => b.rate - a.rate);
 
-  // small "rising creator" boost: creators with zero accepted bookings float up
+  // DP3: rising-creator boost floats up when sorting by "newest"
   if (state.sort === 'newest') {
     list.sort((a,b) => {
-      const aRising = isRisingCreator(a.creatorId) ? 1 : 0;
-      const bRising = isRisingCreator(b.creatorId) ? 1 : 0;
-      if (aRising !== bRising) return bRising - aRising;
-      return 0;
+      const aR = isRisingCreator(a.creatorId) ? 1 : 0;
+      const bR = isRisingCreator(b.creatorId) ? 1 : 0;
+      return bR - aR;
     });
   }
+
   return list;
 }
 
-function isRisingCreator(creatorId) {
-  const accepted = DB.bookings.filter(b => {
-    const g = gigById(b.gigId);
-    return g && g.creatorId === creatorId && b.status === 'accepted';
-  }).length;
-  return accepted === 0;
-}
-
 function renderMarketplace() {
+  renderHeroStats();
   renderCategoryChips();
   const gigs = getVisibleGigs();
   const grid = $('#gigGrid');
 
   if (!gigs.length) {
+    const isFiltering = state.search.trim() || state.category !== 'all';
     grid.innerHTML = `<div class="empty" style="grid-column: 1/-1;">
-      <div class="big">🔍</div>
-      <div>No gigs match your search.</div>
-      <div style="font-size:13px;margin-top:6px;">Try a different keyword or category.</div>
+      <div class="icon">🔍</div>
+      <h3>${isFiltering ? 'No gigs match your filters' : 'No gigs yet'}</h3>
+      <p>${isFiltering
+        ? 'Try a different keyword or clear the category filter.'
+        : 'Be the first to post a gig — head to the Post a Gig tab.'}</p>
+      ${isFiltering ? `<button class="btn btn-ghost" onclick="resetFilters()">Clear filters</button>` : ''}
     </div>`;
     return;
   }
@@ -488,19 +1134,38 @@ function renderMarketplace() {
   grid.innerHTML = gigs.map(g => {
     const creator = userById(g.creatorId);
     const rising = isRisingCreator(g.creatorId);
+    const [c1, c2] = CATEGORY_GRADIENTS[g.category] || ['#7c5cff', '#ec4899'];
+    const isNew = Date.now() - g.createdAt < 1000*60*60*6;
+
     return `
       <div class="gig-card">
-        <span class="cat-badge">${g.category}</span>
-        <h3>${escapeHtml(g.title)}</h3>
-        <p class="desc">${escapeHtml(g.description)}</p>
-        <div class="footer">
-          <div>
-            <div class="rate">${fmtMoney(g.rate)}</div>
-            <div class="creator">by ${creator ? creator.name.split(' ')[0] : 'Unknown'} · ${timeAgo(g.createdAt)}</div>
-          </div>
-          <button class="btn btn-primary btn-sm" data-book="${g.id}">Book</button>
+        <div class="gig-cover" style="background: linear-gradient(135deg, ${c1}, ${c2});">
+          <div class="cover-cat">${escapeHtml(g.category.slice(0, 2).toUpperCase())}</div>
+          ${rising ? `<span class="badge rising">Rising</span>` :
+            isNew ? `<span class="badge hot">New</span>` : ''}
         </div>
-        ${rising ? `<div style="position:absolute;top:14px;right:14px;font-size:11px;background:rgba(34,197,94,0.15);color:var(--green);padding:3px 9px;border-radius:999px;font-weight:600;">RISING</div>` : ''}
+        <div class="gig-body">
+          <div class="gig-cat">${escapeHtml(g.category)}</div>
+          <h3>${escapeHtml(g.title)}</h3>
+          <p class="desc">${escapeHtml(g.description)}</p>
+          <div class="gig-creator">
+            ${avatarHTML(creator)}
+            <div class="meta">
+              <div class="name">${escapeHtml(creator ? creator.name : 'Unknown')}</div>
+              <div class="time">${timeAgo(g.createdAt)}</div>
+            </div>
+          </div>
+        </div>
+        <div class="gig-footer">
+          <div class="price">
+            <div class="amt">${fmtMoney(g.rate)}</div>
+            <div class="per">fixed price</div>
+          </div>
+          <button class="btn btn-primary btn-sm" data-book="${g.id}">
+            Book
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
+        </div>
       </div>
     `;
   }).join('');
@@ -510,15 +1175,39 @@ function renderMarketplace() {
   });
 }
 
-$('#searchInput').addEventListener('input', e => { state.search = e.target.value; renderMarketplace(); });
-$('#sortSelect').addEventListener('change', e => { state.sort = e.target.value; renderMarketplace(); });
+window.resetFilters = () => {
+  state.search = '';
+  state.category = 'all';
+  $('#searchInput').value = '';
+  renderMarketplace();
+};
+
+let searchTimer;
+$('#searchInput').addEventListener('input', e => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    state.search = e.target.value;
+    renderMarketplace();
+  }, 120);
+});
+
+$('#sortSelect').addEventListener('change', e => {
+  state.sort = e.target.value;
+  renderMarketplace();
+});
 
 /* =========================================================
    POST A GIG
    ========================================================= */
 function renderPostForm() {
-  $('#gCategory').innerHTML = CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
+  $('#gCategory').innerHTML =
+    `<option value="" disabled selected>Choose a category…</option>` +
+    CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
 }
+
+$('#gDesc').addEventListener('input', e => {
+  $('#descCount').textContent = e.target.value.length;
+});
 
 $('#gigForm').addEventListener('submit', e => {
   e.preventDefault();
@@ -527,7 +1216,14 @@ $('#gigForm').addEventListener('submit', e => {
   const rate = Number($('#gRate').value);
   const description = $('#gDesc').value.trim();
 
-  if (!title || !category || !rate || !description) return;
+  if (!title || !category || !rate || !description) {
+    showToast('Please fill in all fields', 'error');
+    return;
+  }
+  if (rate <= 0) {
+    showToast('Rate must be greater than 0', 'error');
+    return;
+  }
 
   const gig = {
     id: uid('g'),
@@ -539,8 +1235,12 @@ $('#gigForm').addEventListener('submit', e => {
   saveDB();
 
   $('#gigForm').reset();
+  $('#descCount').textContent = '0';
   showToast('Gig published!');
   state.sort = 'newest';
+  state.category = 'all';
+  state.search = '';
+  $('#searchInput').value = '';
   go('marketplace');
 });
 
@@ -550,16 +1250,63 @@ $('#gigForm').addEventListener('submit', e => {
 function openBookingModal(gigId) {
   const g = gigById(gigId);
   if (!g) return;
+  const creator = userById(g.creatorId);
+
   $('#modalGigId').value = gigId;
-  $('#modalGigTitle').textContent = g.title;
-  $('#modalGigMeta').textContent = `${g.category} · ${fmtMoney(g.rate)} · by ${userById(g.creatorId).name}`;
+
+  $('#modalSummary').innerHTML = `
+    <div class="row"><span class="k">Gig</span><span class="v">${escapeHtml(g.title)}</span></div>
+    <div class="row"><span class="k">Category</span><span class="v">${escapeHtml(g.category)}</span></div>
+    <div class="row"><span class="k">Creator</span><span class="v">${escapeHtml(creator ? creator.name : '—')}</span></div>
+    <div class="row"><span class="k">Price</span><span class="v" style="color:var(--green);">${fmtMoney(g.rate)}</span></div>
+  `;
 
   const me = userById(CURRENT_USER_ID);
-  $('#bName').value = me.role === 'client' ? me.name.replace(/\s*\(.*\)/, '') : '';
+  if (me && me.role === 'client') {
+    $('#bName').value = me.name;
+  } else {
+    $('#bName').value = '';
+  }
+  $('#bMessage').value = '';
+  $('#msgCount').textContent = '0';
+
   $('#bookingModal').classList.add('open');
+  setTimeout(() => $('#bMessage').focus(), 200);
 }
 
-$('#modalCancel').addEventListener('click', () => $('#bookingModal').classList.remove('open'));
+function closeBookingModal() {
+  $('#bookingModal').classList.remove('open');
+}
+
+$$('[data-close-modal]').forEach(el => el.addEventListener('click', () => {
+  closeBookingModal();
+  $('#confirmModal').classList.remove('open');
+}));
+
+// Close modal on backdrop click
+$('#bookingModal').addEventListener('click', e => {
+  if (e.target.id === 'bookingModal') closeBookingModal();
+});
+$('#confirmModal').addEventListener('click', e => {
+  if (e.target.id === 'confirmModal') $('#confirmModal').classList.remove('open');
+});
+
+// Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeBookingModal();
+    $('#confirmModal').classList.remove('open');
+  }
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+    e.preventDefault();
+    if (!$('.view.active').id.includes('marketplace')) go('marketplace');
+    setTimeout(() => $('#searchInput').focus(), 100);
+  }
+});
+
+$('#bMessage').addEventListener('input', e => {
+  $('#msgCount').textContent = e.target.value.length;
+});
 
 $('#bookingForm').addEventListener('submit', e => {
   e.preventDefault();
@@ -567,6 +1314,9 @@ $('#bookingForm').addEventListener('submit', e => {
   const name = $('#bName').value.trim();
   const message = $('#bMessage').value.trim();
   if (!gigId || !name || !message) return;
+
+  const g = gigById(gigId);
+  if (!g) return;
 
   const booking = {
     id: uid('b'),
@@ -580,14 +1330,15 @@ $('#bookingForm').addEventListener('submit', e => {
   DB.bookings.push(booking);
   saveDB();
 
-  $('#bookingModal').classList.remove('open');
+  closeBookingModal();
   $('#bookingForm').reset();
 
-  const g = gigById(gigId);
   const creator = userById(g.creatorId);
-  $('#confirmText').textContent =
-    `Your request for "${g.title}" was sent to ${creator.name}. You'll be notified when they respond.`;
+  $('#confirmText').innerHTML =
+    `Your request for <strong>${escapeHtml(g.title)}</strong> was sent to <strong>${escapeHtml(creator.name)}</strong>.<br>You'll see the status update in <strong>My Bookings</strong>.`;
   $('#confirmModal').classList.add('open');
+
+  renderPendingBadge();
 });
 
 $('#confirmClose').addEventListener('click', () => {
@@ -603,45 +1354,71 @@ $('#confirmViewBookings').addEventListener('click', () => {
    CREATOR DASHBOARD
    ========================================================= */
 function renderDashboard() {
-  const myGigs = DB.gigs.filter(g => g.creatorId === CURRENT_USER_ID);
-  const myGigIds = myGigs.map(g => g.id);
-  const incoming = DB.bookings.filter(b => myGigIds.includes(b.gigId))
-                              .sort((a,b) => b.createdAt - a.createdAt);
+  const user = userById(CURRENT_USER_ID);
 
-  const pending  = incoming.filter(b => b.status === 'pending').length;
-  const accepted = incoming.filter(b => b.status === 'accepted').length;
-  const earned   = incoming.filter(b => b.status === 'accepted')
-                           .reduce((sum, b) => sum + (gigById(b.gigId)?.rate || 0), 0);
-
-  $('#creatorStats').innerHTML = `
-    <div class="stat"><div class="num">${myGigs.length}</div><div class="lbl">Live gigs</div></div>
-    <div class="stat"><div class="num">${pending}</div><div class="lbl">Pending requests</div></div>
-    <div class="stat"><div class="num">${accepted}</div><div class="lbl">Accepted</div></div>
-    <div class="stat"><div class="num">${fmtMoney(earned)}</div><div class="lbl">Total earned</div></div>
-  `;
-
-  const list = $('#incomingBookings');
-  if (!incoming.length) {
-    list.innerHTML = `<div class="empty">
-      <div class="big">📭</div>
-      <div>No booking requests yet.</div>
-      <div style="font-size:13px;margin-top:6px;">Publish a gig so clients can find you.</div>
-    </div>`;
+  if (user.role !== 'creator') {
+    $('#creatorStats').innerHTML = '';
+    $('#incomingBookings').innerHTML = `
+      <div class="empty">
+        <div class="icon">🎭</div>
+        <h3>You're browsing as a client</h3>
+        <p>Switch to a creator from the "Acting as" dropdown to see their dashboard.</p>
+        <button class="btn btn-ghost" onclick="document.getElementById('userSelect').focus()">Switch user</button>
+      </div>`;
     return;
   }
 
-  list.innerHTML = incoming.map(b => {
+  const myGigs = DB.gigs.filter(g => g.creatorId === CURRENT_USER_ID);
+  const myGigIds = myGigs.map(g => g.id);
+  const incoming = DB.bookings
+    .filter(b => myGigIds.includes(b.gigId))
+    .sort((a,b) => b.createdAt - a.createdAt);
+
+  const pending  = incoming.filter(b => b.status === 'pending').length;
+  const accepted = incoming.filter(b => b.status === 'accepted').length;
+  const earned   = incoming
+    .filter(b => b.status === 'accepted')
+    .reduce((s, b) => s + (gigById(b.gigId)?.rate || 0), 0);
+
+  $('#creatorStats').innerHTML = `
+    <div class="stat-card purple"><div class="stat-num">${myGigs.length}</div><div class="stat-lbl">Live gigs</div></div>
+    <div class="stat-card yellow"><div class="stat-num">${pending}</div><div class="stat-lbl">Pending requests</div></div>
+    <div class="stat-card green"><div class="stat-num">${accepted}</div><div class="stat-lbl">Accepted</div></div>
+    <div class="stat-card green"><div class="stat-num">${fmtMoney(earned)}</div><div class="stat-lbl">Total earned</div></div>
+  `;
+
+  if (!incoming.length) {
+    $('#incomingBookings').innerHTML = `
+      <div class="empty">
+        <div class="icon">📭</div>
+        <h3>No booking requests yet</h3>
+        <p>Once clients book your gigs, requests will appear here. Make sure you have live gigs to attract them.</p>
+        <button class="btn btn-primary" onclick="go('post')">Post your first gig</button>
+      </div>`;
+    return;
+  }
+
+  $('#incomingBookings').innerHTML = incoming.map(b => {
     const g = gigById(b.gigId);
     const client = b.clientName || userById(b.clientId)?.name || 'Client';
     const showActions = b.status === 'pending';
+
     return `
       <div class="booking-card">
-        <div class="info">
-          <h4>${escapeHtml(g ? g.title : 'Deleted gig')}</h4>
-          <div class="meta">👤 ${escapeHtml(client)} · ${timeAgo(b.createdAt)} · ${g ? fmtMoney(g.rate) : ''}</div>
-          <div class="msg">"${escapeHtml(b.message)}"</div>
+        <div class="booking-main">
+          ${avatarHTML(userById(b.clientId), 'lg')}
+          <div class="info">
+            <h4>${escapeHtml(g ? g.title : 'Deleted gig')}</h4>
+            <div class="meta">
+              <span>👤 ${escapeHtml(client)}</span>
+              <span class="dot">·</span>
+              <span>${timeAgo(b.createdAt)}</span>
+              ${g ? `<span class="dot">·</span><span style="color:var(--green);font-weight:600;">${fmtMoney(g.rate)}</span>` : ''}
+            </div>
+            <div class="msg">"${escapeHtml(b.message)}"</div>
+          </div>
         </div>
-        <div class="actions">
+        <div class="booking-actions">
           <span class="status ${b.status}">${b.status}</span>
           ${showActions ? `
             <button class="btn btn-success btn-sm" data-accept="${b.id}">Accept</button>
@@ -652,54 +1429,66 @@ function renderDashboard() {
     `;
   }).join('');
 
-  list.querySelectorAll('[data-accept]').forEach(btn =>
+  $('#incomingBookings').querySelectorAll('[data-accept]').forEach(btn =>
     btn.addEventListener('click', () => handleAccept(btn.dataset.accept)));
-  list.querySelectorAll('[data-decline]').forEach(btn =>
+  $('#incomingBookings').querySelectorAll('[data-decline]').forEach(btn =>
     btn.addEventListener('click', () => handleDecline(btn.dataset.decline)));
 }
 
 function handleAccept(bookingId) {
   const b = DB.bookings.find(x => x.id === bookingId);
-  if (!b) return;
+  if (!b || b.status !== 'pending') return;
   b.status = 'accepted';
   b.decidedAt = Date.now();
-  // DP2: auto-decline other pending bookings on the same gig
+
+  // DP2: auto-decline other pendings on this gig
+  let autoDeclined = 0;
   DB.bookings.forEach(other => {
     if (other.id !== b.id && other.gigId === b.gigId && other.status === 'pending') {
       other.status = 'declined';
       other.reason = 'Gig was filled by another booking.';
       other.decidedAt = Date.now();
+      autoDeclined++;
     }
   });
+
   saveDB();
-  showToast('Booking accepted.');
+  showToast(autoDeclined
+    ? `Booking accepted. ${autoDeclined} other pending request${autoDeclined>1?'s':''} auto-declined.`
+    : 'Booking accepted.');
   renderDashboard();
+  renderPendingBadge();
 }
 
 function handleDecline(bookingId) {
   const b = DB.bookings.find(x => x.id === bookingId);
-  if (!b) return;
+  if (!b || b.status !== 'pending') return;
   b.status = 'declined';
   b.decidedAt = Date.now();
   saveDB();
-  showToast('Booking declined.');
+  showToast('Booking declined.', 'info');
   renderDashboard();
+  renderPendingBadge();
 }
 
 /* =========================================================
    MY BOOKINGS (client)
    ========================================================= */
 function renderMyBookings() {
-  const mine = DB.bookings.filter(b => b.clientId === CURRENT_USER_ID)
-                          .sort((a,b) => b.createdAt - a.createdAt);
+  const mine = DB.bookings
+    .filter(b => b.clientId === CURRENT_USER_ID)
+    .sort((a,b) => b.createdAt - a.createdAt);
+
   const list = $('#myBookings');
 
   if (!mine.length) {
-    list.innerHTML = `<div class="empty">
-      <div class="big">🎫</div>
-      <div>You haven't booked anything yet.</div>
-      <div style="font-size:13px;margin-top:6px;">Head to the marketplace to find a creator.</div>
-    </div>`;
+    list.innerHTML = `
+      <div class="empty">
+        <div class="icon">🎫</div>
+        <h3>No bookings yet</h3>
+        <p>Head to the marketplace and book a creator. Your requests and their status will show up here.</p>
+        <button class="btn btn-primary" onclick="go('marketplace')">Browse marketplace</button>
+      </div>`;
     return;
   }
 
@@ -707,29 +1496,36 @@ function renderMyBookings() {
     const g = gigById(b.gigId);
     const creator = g ? userById(g.creatorId) : null;
 
-    // ---- DP1: what a client sees after decline ----
+    // DP1: what a client sees after a decline
     let extra = '';
     if (b.status === 'declined') {
       extra = `
-        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
-          <button class="btn btn-ghost btn-sm" data-similar="${g ? g.category : ''}">Find similar gigs</button>
+        <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-ghost btn-sm" data-similar="${g ? escapeHtml(g.category) : ''}">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            Find similar gigs
+          </button>
         </div>
-        ${b.reason ? `<div class="msg" style="margin-top:8px;">Reason: ${escapeHtml(b.reason)}</div>` : ''}
+        ${b.reason ? `<div class="reason">Reason: ${escapeHtml(b.reason)}</div>` : ''}
       `;
     }
 
     return `
       <div class="booking-card">
-        <div class="info">
-          <h4>${escapeHtml(g ? g.title : 'Deleted gig')}</h4>
-          <div class="meta">
-            ${creator ? 'by ' + escapeHtml(creator.name.split(' ')[0]) : ''}
-            · ${g ? fmtMoney(g.rate) : ''} · requested ${timeAgo(b.createdAt)}
+        <div class="booking-main">
+          ${avatarHTML(creator, 'lg')}
+          <div class="info">
+            <h4>${escapeHtml(g ? g.title : 'Deleted gig')}</h4>
+            <div class="meta">
+              ${creator ? `<span>by ${escapeHtml(creator.name)}</span><span class="dot">·</span>` : ''}
+              ${g ? `<span style="color:var(--green);font-weight:600;">${fmtMoney(g.rate)}</span><span class="dot">·</span>` : ''}
+              <span>requested ${timeAgo(b.createdAt)}</span>
+            </div>
+            <div class="msg">"${escapeHtml(b.message)}"</div>
+            ${extra}
           </div>
-          <div class="msg">"${escapeHtml(b.message)}"</div>
-          ${extra}
         </div>
-        <div class="actions">
+        <div class="booking-actions">
           <span class="status ${b.status}">${b.status}</span>
         </div>
       </div>
@@ -741,18 +1537,11 @@ function renderMyBookings() {
       state.category = btn.dataset.similar || 'all';
       state.search = '';
       $('#searchInput').value = '';
+      $('#sortSelect').value = 'newest';
+      state.sort = 'newest';
       go('marketplace');
     });
   });
-}
-
-/* =========================================================
-   UTIL
-   ========================================================= */
-function escapeHtml(s) {
-  return String(s ?? '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
 }
 
 /* =========================================================
@@ -760,6 +1549,7 @@ function escapeHtml(s) {
    ========================================================= */
 renderUserSelect();
 renderPostForm();
+renderPendingBadge();
 renderMarketplace();
 </script>
 </body>
