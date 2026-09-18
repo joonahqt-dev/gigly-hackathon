@@ -148,7 +148,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 @keyframes calendarFlip { 0%,90%,100%{transform:rotateX(0deg);} 45%{transform:rotateX(-180deg);} }
 
 /* ================= PAGE HEAD ================= */
-.page-head { margin-bottom: 28px; margin-top: 20px; }
+.page-head { margin-bottom: 28px; margin-top: 20px; position: relative; }
 .page-head h1 { font-size: clamp(28px, 4vw, 40px); font-weight: 900; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 8px; }
 .page-head h1 .grad { background: linear-gradient(90deg,var(--accent-2),var(--pink),var(--orange)); background-size:200% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; animation: gradientFlow 6s ease-in-out infinite; }
 @keyframes gradientFlow { 0%,100%{background-position:0% 50%;} 50%{background-position:100% 50%;} }
@@ -207,13 +207,38 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .chip.active .count { background: rgba(255,255,255,0.28); }
 
 /* ================= GIG GRID ================= */
-.gig-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 20px; }
-.gig-card { background: var(--panel); border: 1px solid var(--border-soft); border-radius: var(--radius-xl); display: flex; flex-direction: column; overflow: hidden; position: relative; cursor: pointer; transition: all 0.3s cubic-bezier(0.16,1,0.3,1); animation: cardIn 0.5s cubic-bezier(0.16,1,0.3,1) backwards; }
+.gig-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 20px; perspective: 1200px; perspective-origin: 50% 50%; }
+.gig-card { background: var(--panel); border: 1px solid var(--border-soft); border-radius: var(--radius-xl); display: flex; flex-direction: column; overflow: hidden; position: relative; cursor: pointer; transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s, border-color 0.3s, opacity 0.4s; transform-style: preserve-3d; will-change: transform; animation: cardIn 0.5s cubic-bezier(0.16,1,0.3,1) backwards; }
 .gig-card:nth-child(1){animation-delay:0.03s;} .gig-card:nth-child(2){animation-delay:0.06s;}
 .gig-card:nth-child(3){animation-delay:0.09s;} .gig-card:nth-child(4){animation-delay:0.12s;}
 .gig-card:nth-child(5){animation-delay:0.15s;} .gig-card:nth-child(n+6){animation-delay:0.18s;}
 @keyframes cardIn { from{opacity:0;transform:translateY(20px) scale(0.96);} to{opacity:1;transform:none;} }
-.gig-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+.gig-card:hover { box-shadow: var(--shadow-lg); border-color: var(--accent); }
+.gig-card .gig-cover, .gig-card .gig-body, .gig-card .gig-footer { transform-style: preserve-3d; transition: transform 0.35s cubic-bezier(0.16,1,0.3,1); }
+
+/* 3D tilt state */
+.gig-card.tilting {
+  transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translate3d(0, -6px, 0) scale(1.02);
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6), 0 0 0 1px var(--accent-glow);
+  border-color: var(--accent);
+}
+.gig-card.tilting .gig-cover { transform: translateZ(30px); }
+.gig-card.tilting .gig-body  { transform: translateZ(20px); }
+.gig-card.tilting .gig-footer { transform: translateZ(28px); }
+.gig-card::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.15), transparent 40%); opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 5; }
+.gig-card.tilting::after { opacity: 1; }
+
+/* Parallax */
+.gig-card[data-parallax="in"] { animation: cardParallaxIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+@keyframes cardParallaxIn {
+  from { opacity: 0; transform: translate3d(0, 60px, -200px) rotateX(-15deg); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .gig-card, .gig-card.tilting { transform: none !important; }
+  .gig-card::after { display: none; }
+}
 
 .gig-cover { height: 140px; position: relative; overflow: hidden; display: grid; place-items: center; }
 .gig-cover .cover-cat { position: relative; z-index: 1; font-size: 44px; font-weight: 900; color: rgba(255,255,255,0.95); text-shadow: 0 6px 24px rgba(0,0,0,0.5); letter-spacing: -0.05em; transition: transform 0.4s; }
@@ -253,6 +278,63 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .price .amt { font-size: 19px; font-weight: 900; letter-spacing: -0.03em; color: var(--green); line-height: 1; }
 .price .per { font-size: 10.5px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 3px; }
 
+/* ================= HERO ORB ================= */
+.hero-orb-wrap {
+  position: absolute; top: 0; right: 0;
+  width: 180px; height: 180px;
+  pointer-events: none;
+  opacity: 0.9;
+  animation: orbFloat 6s ease-in-out infinite;
+}
+@keyframes orbFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+@media (max-width: 900px) { .hero-orb-wrap { display: none; } }
+.hero-orb {
+  position: relative; width: 100%; height: 100%;
+  transform-style: preserve-3d;
+  animation: orbSpin 18s linear infinite;
+}
+@keyframes orbSpin {
+  from { transform: rotateY(0deg) rotateX(15deg); }
+  to   { transform: rotateY(360deg) rotateX(15deg); }
+}
+.hero-orb .orb-core {
+  position: absolute; top: 50%; left: 50%;
+  width: 60px; height: 60px;
+  margin: -30px 0 0 -30px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--accent-3), var(--accent), var(--pink));
+  box-shadow: 0 0 40px var(--accent-glow), 0 0 80px var(--pink-glow);
+  animation: orbPulse 3s ease-in-out infinite;
+}
+@keyframes orbPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+.hero-orb .orb-ring {
+  position: absolute; top: 50%; left: 50%;
+  border: 1.5px solid var(--accent-2); border-radius: 50%;
+  transform-style: preserve-3d; opacity: 0.5;
+}
+.hero-orb .orb-ring.r1 { width: 100px; height: 100px; margin: -50px 0 0 -50px; transform: rotateX(70deg); }
+.hero-orb .orb-ring.r2 { width: 140px; height: 140px; margin: -70px 0 0 -70px; transform: rotateX(70deg) rotateY(60deg); border-color: var(--pink); }
+.hero-orb .orb-ring.r3 { width: 170px; height: 170px; margin: -85px 0 0 -85px; transform: rotateX(70deg) rotateY(-60deg); border-color: var(--cyan); opacity: 0.3; }
+.hero-orb .orb-icon {
+  position: absolute; top: 50%; left: 50%;
+  width: 26px; height: 26px;
+  margin: -13px 0 0 -13px;
+  display: grid; place-items: center; border-radius: 50%;
+  background: var(--panel); border: 1px solid var(--accent);
+  font-size: 13px; box-shadow: 0 0 12px var(--accent-glow);
+  animation: orbIconFloat 4s ease-in-out infinite;
+}
+@keyframes orbIconFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-6px) scale(1.1); } }
+.hero-orb .orb-icon:nth-child(5) { animation-delay: 0s; }
+.hero-orb .orb-icon:nth-child(6) { animation-delay: 0.5s; }
+.hero-orb .orb-icon:nth-child(7) { animation-delay: 1s; }
+.hero-orb .orb-icon:nth-child(8) { animation-delay: 1.5s; }
+.hero-orb .orb-icon:nth-child(9) { animation-delay: 2s; }
+.hero-orb .orb-icon:nth-child(10) { animation-delay: 2.5s; }
+
 /* ================= PANELS / FORMS ================= */
 .panel { background: var(--panel); border: 1px solid var(--border-soft); border-radius: var(--radius-xl); padding: 28px; }
 .panel-narrow { max-width: 680px; margin: 0 auto; }
@@ -260,19 +342,13 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .field { display: grid; gap: 8px; }
 .field label { font-size: 13px; font-weight: 700; color: var(--text-dim); display: flex; align-items: center; gap: 6px; }
 .field label .req { color: var(--accent-2); }
-.field input, .field select, .field textarea {
-  width: 100%; padding: 12px 15px; background: var(--panel-2);
-  border: 1px solid var(--border); color: var(--text);
-  border-radius: 11px; font-size: 14px; font-family: inherit; outline: none;
-  transition: all 0.2s;
-}
+.field input, .field select, .field textarea { width: 100%; padding: 12px 15px; background: var(--panel-2); border: 1px solid var(--border); color: var(--text); border-radius: 11px; font-size: 14px; font-family: inherit; outline: none; transition: all 0.2s; }
 .field textarea { resize: vertical; min-height: 100px; line-height: 1.55; }
 .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); background: var(--panel-3); box-shadow: 0 0 0 4px var(--accent-glow); }
 .field .hint { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; }
 .input-prefix { position: relative; }
 .input-prefix .prefix { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); font-weight: 800; pointer-events: none; }
 .input-prefix input { padding-left: 36px; }
-
 .price-suggest { background: linear-gradient(135deg, color-mix(in srgb, var(--cyan) 10%, var(--panel)), var(--panel-2)); border: 1px solid var(--cyan); border-radius: 12px; padding: 14px; margin-top: 8px; animation: aiSlide 0.4s; }
 .price-suggest .ps-head { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; color: var(--cyan); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
 .price-suggest .ps-range { font-size: 20px; font-weight: 900; color: var(--text); margin-bottom: 4px; }
@@ -295,15 +371,12 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 /* ================= BOOKING LIST ================= */
 .booking-list { display: flex; flex-direction: column; gap: 12px; }
 .booking-card { background: var(--panel); border: 1px solid var(--border-soft); border-radius: var(--radius-lg); padding: 18px; display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; position: relative; overflow: hidden; transition: all 0.22s; animation: fadeUp 0.35s backwards; }
-.booking-card:nth-child(1){animation-delay:0.05s;} .booking-card:nth-child(2){animation-delay:0.1s;}
-.booking-card:nth-child(3){animation-delay:0.15s;} .booking-card:nth-child(n+4){animation-delay:0.2s;}
 @keyframes fadeUp { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:none;} }
 .booking-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--muted); }
 .booking-card:has(.status.accepted)::before { background: var(--green); }
 .booking-card:has(.status.declined)::before { background: var(--red); }
 .booking-card:has(.status.pending)::before { background: var(--yellow); }
 .booking-card:hover { border-color: var(--border); background: var(--panel-2); }
-
 .booking-main { flex: 1; min-width: 260px; display: flex; gap: 14px; }
 .booking-main .info { flex: 1; min-width: 0; }
 .booking-main h4 { font-size: 15px; font-weight: 800; margin-bottom: 4px; }
@@ -311,7 +384,6 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .booking-main .meta .dot { color: var(--border); }
 .booking-main .msg { font-size: 12.5px; color: var(--text-dim); margin-top: 8px; padding: 8px 12px; background: var(--panel-2); border-radius: 8px; border-left: 3px solid var(--accent); font-style: italic; }
 .booking-main .reason { font-size: 12px; color: var(--red); margin-top: 6px; padding: 8px 12px; background: var(--red-soft); border-radius: 8px; border-left: 3px solid var(--red); }
-
 .booking-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .status { display: inline-flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em; padding: 5px 12px; border-radius: 999px; text-transform: uppercase; }
 .status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; }
@@ -321,7 +393,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .status.delivered { background: rgba(6,182,212,0.15); color: var(--cyan); }
 .status.completed { background: var(--green-soft); color: var(--green); }
 
-/* ================= ESCROW BAR ================= */
+/* ESCROW */
 .escrow-bar { display: flex; align-items: center; gap: 4px; background: var(--panel-2); border-radius: 10px; padding: 10px 12px; margin-top: 10px; border: 1px solid var(--border-soft); font-size: 11.5px; }
 .escrow-step { flex: 1; display: flex; align-items: center; gap: 6px; color: var(--muted); font-weight: 700; }
 .escrow-step .dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid currentColor; display: grid; place-items: center; flex-shrink: 0; font-size: 9px; }
@@ -333,7 +405,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .escrow-bar .line { flex: 0 0 20px; height: 2px; background: var(--border); border-radius: 1px; }
 .escrow-bar .line.done { background: var(--green); }
 
-/* ================= CHAT MODAL ================= */
+/* CHAT */
 .chat-modal-body { display: flex; flex-direction: column; height: 520px; background: var(--panel-2); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
 .chat-head { padding: 14px 18px; border-bottom: 1px solid var(--border-soft); display: flex; align-items: center; gap: 12px; background: var(--panel); }
 .chat-head .name { font-size: 14px; font-weight: 800; }
@@ -359,7 +431,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .chat-input button { padding: 0 16px; background: linear-gradient(135deg,var(--accent),var(--accent-2)); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; font-family: inherit; }
 .chat-input button:hover { opacity: 0.9; }
 
-/* ================= MODAL ================= */
+/* MODAL */
 .modal-backdrop { position: fixed; inset: 0; background: rgba(4,5,10,0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
 .modal-backdrop.open { opacity: 1; pointer-events: auto; }
 .modal { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 26px; width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto; box-shadow: var(--shadow-lg); transform: scale(0.92); transition: transform 0.32s cubic-bezier(0.16,1,0.3,1); position: relative; }
@@ -371,21 +443,25 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .modal-close { position: absolute; top: 16px; right: 16px; background: var(--panel-2); border: 1px solid var(--border); color: var(--muted); width: 32px; height: 32px; border-radius: 9px; cursor: pointer; display: grid; place-items: center; transition: all 0.18s; z-index: 5; }
 .modal-close:hover { color: var(--red); border-color: var(--red); background: var(--red-soft); }
 .modal-actions { display: flex; gap: 10px; margin-top: 4px; flex-wrap: wrap; }
-
 .booking-summary { background: var(--panel-2); border-radius: 12px; padding: 14px; margin-bottom: 18px; border: 1px solid var(--border-soft); }
 .booking-summary .row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: 13px; }
 .booking-summary .row:not(:last-child) { border-bottom: 1px solid var(--border-soft); }
 .booking-summary .k { color: var(--muted); font-weight: 600; }
 .booking-summary .v { font-weight: 700; text-align: right; }
-
 .confirm-modal { text-align: center; padding: 40px 26px 30px; }
-.confirm-icon { width: 76px; height: 76px; margin: 0 auto 20px; border-radius: 50%; background: linear-gradient(135deg,var(--green-soft),transparent); border: 2px solid var(--green); display: grid; place-items: center; font-size: 34px; animation: pop 0.6s; }
-@keyframes pop { 0%{transform:scale(0) rotate(-180deg);opacity:0;} 60%{transform:scale(1.15) rotate(10deg);} 100%{transform:scale(1) rotate(0);opacity:1;} }
+.confirm-icon { width: 76px; height: 76px; margin: 0 auto 20px; border-radius: 50%; background: linear-gradient(135deg,var(--green-soft),transparent); border: 2px solid var(--green); display: grid; place-items: center; font-size: 34px; transform-style: preserve-3d; animation: check3dIn 1s cubic-bezier(0.16,1,0.3,1) backwards; position: relative; }
+@keyframes check3dIn {
+  0% { transform: perspective(600px) rotateY(-180deg) scale(0) rotateZ(-180deg); opacity: 0; }
+  60% { transform: perspective(600px) rotateY(15deg) scale(1.15) rotateZ(10deg); opacity: 1; }
+  100% { transform: perspective(600px) rotateY(0) scale(1) rotateZ(0); opacity: 1; }
+}
+.confirm-icon::after { content: ''; position: absolute; inset: -20px; border-radius: 50%; border: 2px solid var(--green); opacity: 0; animation: ringBurst 1.2s ease-out 0.3s; }
+@keyframes ringBurst { 0% { transform: scale(0.5); opacity: 0.8; } 100% { transform: scale(2); opacity: 0; } }
 .confirm-modal h3 { font-size: 22px; margin-bottom: 8px; }
 .confirm-modal p { color: var(--text-dim); font-size: 14px; margin-bottom: 24px; line-height: 1.55; }
 .confirm-modal .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 
-/* ================= TOAST ================= */
+/* TOAST */
 .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(150%); background: var(--panel-2); border: 1px solid var(--border); color: var(--text); padding: 14px 20px; border-radius: 14px; font-size: 13px; font-weight: 600; z-index: 400; display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow-lg); transition: transform 0.45s cubic-bezier(0.16,1,0.3,1); max-width: 90vw; }
 .toast.show { transform: translateX(-50%) translateY(0); }
 .toast .toast-icon { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; font-size: 11px; font-weight: 900; }
@@ -394,7 +470,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .toast.info .toast-icon { background: var(--accent-glow); color: var(--accent-2); }
 .toast .undo-btn { background: var(--accent); color: white; border: none; padding: 5px 12px; border-radius: 7px; font-size: 11.5px; font-weight: 800; cursor: pointer; margin-left: 6px; }
 
-/* ================= PALETTE ================= */
+/* PALETTE */
 .palette-backdrop { position: fixed; inset: 0; z-index: 500; background: rgba(4,5,10,0.7); backdrop-filter: blur(10px); display: flex; align-items: flex-start; justify-content: center; padding: 12vh 20px 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
 .palette-backdrop.open { opacity: 1; pointer-events: auto; }
 .palette { width: 100%; max-width: 640px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); overflow: hidden; transform: translateY(-12px) scale(0.97); transition: transform 0.25s; }
@@ -408,7 +484,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .palette-item .p-hint { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--muted); padding: 2px 7px; background: var(--panel-3); border-radius: 5px; }
 .palette-empty { padding: 40px; text-align: center; color: var(--muted); font-size: 14px; }
 
-/* ================= PROFILE ================= */
+/* PROFILE */
 .profile-header { background: linear-gradient(135deg, var(--accent-glow), var(--pink-glow)); border-radius: var(--radius-xl); padding: 32px 28px; margin-bottom: 24px; position: relative; overflow: hidden; }
 .profile-header::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, transparent, color-mix(in srgb, var(--panel) 70%, transparent)); pointer-events: none; }
 .profile-header > * { position: relative; z-index: 1; }
@@ -435,7 +511,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .review-stars { display: flex; gap: 2px; color: var(--yellow); font-size: 14px; margin-bottom: 6px; }
 .review-text { font-size: 13.5px; color: var(--text-dim); line-height: 1.6; }
 
-/* ================= CURSOR ================= */
+/* CURSOR */
 @media (hover: hover) and (pointer: fine) { * { cursor: none !important; } input, textarea { cursor: text !important; } }
 .cursor-layer { position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0; transition: opacity 0.3s; }
 .cursor-layer.active { opacity: 1; }
@@ -456,38 +532,36 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .click-ripple { position: absolute; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; border: 2px solid var(--accent-2); pointer-events: none; animation: rippleExpand 0.7s cubic-bezier(0.16,1,0.3,1) forwards; }
 @keyframes rippleExpand { 0%{transform:scale(0.5);opacity:1;border-width:3px;} 100%{transform:scale(6);opacity:0;border-width:0.5px;} }
 .click-ripple.secondary { border-color: var(--pink); animation-delay: 0.08s; }
-@media (hover: none), (pointer: coarse) { .cursor-layer, .click-ripple-layer { display: none !important; } * { cursor: auto !important; } }
 
-/* ================= EMPTY ================= */
+/* COIN BURST */
+.coin-particle { position: fixed; width: 20px; height: 20px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #fde047, #f59e0b, #b45309); border: 1.5px solid #92400e; pointer-events: none; z-index: 10000; display: grid; place-items: center; font-size: 10px; font-weight: 900; color: #78350f; box-shadow: 0 0 12px rgba(251, 191, 36, 0.6); animation: coinFly 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@keyframes coinFly {
+  0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+  20% { opacity: 1; transform: translate(calc(var(--dx) * 0.3), calc(var(--dy) * 0.3)) scale(1.1); }
+  100% { transform: translate(var(--dx), calc(var(--dy) + 200px)) scale(0.4) rotate(720deg); opacity: 0; }
+}
+
+/* EMPTY */
 .empty { text-align: center; padding: 60px 24px; background: var(--panel); border: 1px dashed var(--border); border-radius: var(--radius-xl); }
 .empty .icon { width: 72px; height: 72px; margin: 0 auto 18px; display: grid; place-items: center; background: linear-gradient(135deg,var(--panel-2),var(--panel)); border: 1px solid var(--border); border-radius: 50%; font-size: 32px; animation: float 3s ease-in-out infinite; }
 @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
 .empty h3 { font-size: 17px; font-weight: 800; margin-bottom: 8px; }
 .empty p { color: var(--muted); font-size: 13.5px; max-width: 400px; margin: 0 auto 20px; line-height: 1.55; }
 
-/* ================= MOBILE NAV ================= */
+/* MOBILE NAV */
 .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 90; background: color-mix(in srgb,var(--bg) 92%,transparent); backdrop-filter: blur(20px); border-top: 1px solid var(--border-soft); padding: 8px 8px calc(8px + env(safe-area-inset-bottom)); justify-content: space-around; }
 .mobile-nav button { background: transparent; border: none; color: var(--muted); cursor: pointer; font-family: inherit; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 10px; border-radius: 10px; font-size: 10px; font-weight: 700; position: relative; }
 .mobile-nav button.active { color: var(--accent-2); background: var(--panel); }
 .mobile-nav button .pill { position: absolute; top: 2px; right: 4px; background: var(--accent); color: white; font-size: 9px; font-weight: 800; padding: 1px 5px; border-radius: 999px; min-width: 14px; text-align: center; }
 
-/* ================= THEME TOGGLE ================= */
+/* THEME TOGGLE */
 .theme-toggle { position: relative; overflow: hidden; }
 .theme-toggle svg { position: absolute; transition: all 0.4s; }
 [data-theme="dark"] .theme-toggle .sun { transform: translateY(-100%); opacity: 0; }
 [data-theme="light"] .theme-toggle .moon { transform: translateY(100%); opacity: 0; }
 
-/* ================= 🤖 AI CHATBOT ================= */
-.chatbot-fab {
-  position: fixed; bottom: 28px; right: 28px;
-  width: 60px; height: 60px; border-radius: 50%; border: none;
-  background: linear-gradient(135deg, var(--accent), var(--pink));
-  color: white; cursor: pointer; display: grid; place-items: center;
-  box-shadow: 0 12px 32px var(--accent-glow), 0 4px 12px rgba(0,0,0,0.3);
-  z-index: 250; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  animation: fabEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-  animation-delay: 1.2s;
-}
+/* AI CHATBOT */
+.chatbot-fab { position: fixed; bottom: 28px; right: 28px; width: 60px; height: 60px; border-radius: 50%; border: none; background: linear-gradient(135deg, var(--accent), var(--pink)); color: white; cursor: pointer; display: grid; place-items: center; box-shadow: 0 12px 32px var(--accent-glow), 0 4px 12px rgba(0,0,0,0.3); z-index: 250; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); animation: fabEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards; animation-delay: 1.2s; }
 @keyframes fabEnter { from { transform: scale(0) rotate(-180deg); opacity: 0; } to { transform: scale(1) rotate(0); opacity: 1; } }
 .chatbot-fab:hover { transform: scale(1.08) translateY(-2px); box-shadow: 0 16px 40px var(--accent-glow), 0 6px 16px rgba(0,0,0,0.35); }
 .chatbot-fab:active { transform: scale(0.96); }
@@ -496,25 +570,9 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .chatbot-fab .fab-pulse { position: absolute; inset: 0; border-radius: 50%; background: inherit; animation: fabPulse 2.5s ease-out infinite; z-index: 1; }
 @keyframes fabPulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.7); opacity: 0; } }
 
-.chatbot-panel {
-  position: fixed; bottom: 100px; right: 28px; width: 380px;
-  max-width: calc(100vw - 32px); height: 580px;
-  max-height: calc(100vh - 130px);
-  background: var(--panel); border: 1px solid var(--border);
-  border-radius: 22px; box-shadow: 0 24px 70px rgba(0,0,0,0.55), 0 0 0 1px var(--accent-glow);
-  display: flex; flex-direction: column; overflow: hidden; z-index: 249;
-  opacity: 0; pointer-events: none;
-  transform: translateY(20px) scale(0.96);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  transform-origin: bottom right;
-}
+.chatbot-panel { position: fixed; bottom: 100px; right: 28px; width: 380px; max-width: calc(100vw - 32px); height: 580px; max-height: calc(100vh - 130px); background: var(--panel); border: 1px solid var(--border); border-radius: 22px; box-shadow: 0 24px 70px rgba(0,0,0,0.55), 0 0 0 1px var(--accent-glow); display: flex; flex-direction: column; overflow: hidden; z-index: 249; opacity: 0; pointer-events: none; transform: translateY(20px) scale(0.96); transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); transform-origin: bottom right; }
 .chatbot-panel.open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
-
-.chatbot-head {
-  display: flex; align-items: center; gap: 12px; padding: 16px 18px;
-  border-bottom: 1px solid var(--border-soft);
-  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--panel)), var(--panel));
-}
+.chatbot-head { display: flex; align-items: center; gap: 12px; padding: 16px 18px; border-bottom: 1px solid var(--border-soft); background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--panel)), var(--panel)); }
 .chatbot-avatar { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--pink)); display: grid; place-items: center; color: white; box-shadow: 0 4px 14px var(--accent-glow); flex-shrink: 0; }
 .chatbot-title { flex: 1; min-width: 0; }
 .chatbot-title .name { font-size: 14.5px; font-weight: 800; letter-spacing: -0.01em; }
@@ -523,11 +581,9 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 @keyframes livePulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.4;transform:scale(0.85);} }
 .chatbot-close { background: var(--panel-2); border: 1px solid var(--border); color: var(--muted); width: 30px; height: 30px; border-radius: 9px; cursor: pointer; display: grid; place-items: center; transition: all 0.18s; }
 .chatbot-close:hover { color: var(--red); border-color: var(--red); background: var(--red-soft); }
-
 .chatbot-body { flex: 1; overflow-y: auto; padding: 18px 16px 8px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
 .chatbot-body::-webkit-scrollbar { width: 8px; }
 .chatbot-body::-webkit-scrollbar-thumb { background: var(--panel-3); border-radius: 4px; }
-
 .chatbot-msg { max-width: 85%; padding: 11px 15px; border-radius: 16px; font-size: 13.5px; line-height: 1.55; animation: chatbotMsgIn 0.35s cubic-bezier(0.16, 1, 0.3, 1); word-wrap: break-word; }
 @keyframes chatbotMsgIn { from { opacity: 0; transform: translateY(8px) scale(0.96); } to { opacity: 1; transform: none; } }
 .chatbot-msg.bot { background: var(--panel-2); border: 1px solid var(--border-soft); align-self: flex-start; border-bottom-left-radius: 5px; color: var(--text); }
@@ -539,12 +595,10 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 @keyframes typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-5px); opacity: 1; } }
 .chatbot-msg strong { color: var(--accent-2); font-weight: 700; }
 .chatbot-msg.me strong { color: white; }
-
 .chatbot-suggestions { padding: 8px 16px 6px; display: flex; gap: 6px; flex-wrap: wrap; border-top: 1px solid var(--border-soft); background: var(--panel); max-height: 120px; overflow-y: auto; }
 .chatbot-suggestions:empty { display: none; }
 .chatbot-chip { background: var(--panel-2); border: 1px solid var(--border); color: var(--text-dim); font-size: 11.5px; font-weight: 600; padding: 6px 11px; border-radius: 999px; cursor: pointer; font-family: inherit; transition: all 0.18s; white-space: nowrap; }
 .chatbot-chip:hover { color: var(--accent-2); border-color: var(--accent); background: var(--panel-3); transform: translateY(-1px); }
-
 .chatbot-input { display: flex; gap: 8px; padding: 12px 14px 14px; border-top: 1px solid var(--border-soft); background: var(--panel); }
 .chatbot-input input { flex: 1; padding: 11px 15px; background: var(--panel-2); border: 1px solid var(--border); color: var(--text); border-radius: 11px; font-size: 13.5px; font-family: inherit; outline: none; transition: all 0.18s; }
 .chatbot-input input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
@@ -553,12 +607,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .chatbot-input button:hover { opacity: 0.9; transform: translateY(-1px); }
 .chatbot-input button:active { transform: scale(0.94); }
 
-@media (max-width: 500px) {
-  .chatbot-panel { width: calc(100vw - 24px); right: 12px; bottom: 88px; height: calc(100vh - 160px); }
-  .chatbot-fab { bottom: 88px; right: 16px; width: 54px; height: 54px; }
-}
-
-/* ================= RESPONSIVE ================= */
+/* RESPONSIVE */
 @media (max-width: 900px) {
   .topbar-inner { padding: 10px 16px; }
   nav.tabs { display: none; }
@@ -570,6 +619,10 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
   .modal { padding: 20px; }
   .scene { margin: 0 -16px 20px; height: 140px; }
   .user-switch label { display: none; }
+}
+@media (max-width: 500px) {
+  .chatbot-panel { width: calc(100vw - 24px); right: 12px; bottom: 88px; height: calc(100vh - 160px); }
+  .chatbot-fab { bottom: 88px; right: 16px; width: 54px; height: 54px; }
 }
 @media (max-width: 480px) {
   .stat-card .stat-num { font-size: 22px; }
@@ -657,6 +710,21 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
       <div class="page-head">
         <h1>Find a <span class="grad">creator</span>, get it done.</h1>
         <p>Describe what you need in plain English. Our AI finds the best gigs, suggests a price, and drafts your message.</p>
+
+        <div class="hero-orb-wrap" aria-hidden="true">
+          <div class="hero-orb">
+            <div class="orb-core"></div>
+            <div class="orb-ring r1"></div>
+            <div class="orb-ring r2"></div>
+            <div class="orb-ring r3"></div>
+            <div class="orb-icon">🎨</div>
+            <div class="orb-icon">💻</div>
+            <div class="orb-icon">✍️</div>
+            <div class="orb-icon">🎬</div>
+            <div class="orb-icon">🎵</div>
+            <div class="orb-icon">📈</div>
+          </div>
+        </div>
       </div>
 
       <div class="ai-search-wrap">
@@ -966,7 +1034,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
   </div>
 </div>
 
-<!-- 🤖 AI CHATBOT -->
+<!-- AI CHATBOT -->
 <button class="chatbot-fab" id="chatbotFab" title="Ask Gigly AI">
   <svg class="fab-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M12 2 L14 9 L21 11 L14 13 L12 20 L10 13 L3 11 L10 9 Z"/>
@@ -1010,7 +1078,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 /* =========================================================
    DATA LAYER
    ========================================================= */
-const DB_KEY = 'gigly_db_v5';
+const DB_KEY = 'gigly_db_v6';
 const THEME_KEY = 'gigly_theme';
 const SESSION_KEY = 'gigly_session';
 
@@ -1343,6 +1411,7 @@ function renderMarketplace() {
   grid.querySelectorAll('[data-book]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); openBookingModal(b.dataset.book); }));
   grid.querySelectorAll('[data-video]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); $('#videoModal').classList.add('open'); }));
   grid.querySelectorAll('[data-creator]').forEach(el => el.addEventListener('click', e => { e.stopPropagation(); openProfile(el.dataset.creator); }));
+  attachTilt();
 }
 
 function renderCategoryChips() {
@@ -1367,6 +1436,45 @@ $('#searchInput').addEventListener('input', e => {
   searchTimer = setTimeout(() => { state.search = e.target.value; renderMarketplace(); }, 120);
 });
 $('#sortSelect').addEventListener('change', e => { state.sort = e.target.value; renderMarketplace(); });
+
+/* 3D TILT */
+function attachTilt() {
+  if (window.matchMedia('(hover: none), (prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('.gig-card').forEach(card => {
+    if (card._tiltAttached) return;
+    card._tiltAttached = true;
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const px = x / rect.width;
+      const py = y / rect.height;
+      const rx = (0.5 - py) * 16;
+      const ry = (px - 0.5) * 16;
+      card.style.setProperty('--rx', rx.toFixed(2) + 'deg');
+      card.style.setProperty('--ry', ry.toFixed(2) + 'deg');
+      card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+      card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+      card.classList.add('tilting');
+    });
+    card.addEventListener('mouseleave', () => {
+      card.classList.remove('tilting');
+      card.style.setProperty('--rx', '0deg');
+      card.style.setProperty('--ry', '0deg');
+    });
+  });
+}
+
+/* PARALLAX */
+function applyParallax() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('.gig-card').forEach(card => {
+    if (card.dataset.parallax) return;
+    const rect = card.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.9) card.dataset.parallax = 'in';
+  });
+}
+window.addEventListener('scroll', applyParallax, { passive: true });
 
 /* POST A GIG */
 function renderPostForm() {
@@ -1566,9 +1674,31 @@ function attachBookingListeners(root) {
   root.querySelectorAll('[data-chat]').forEach(b => b.addEventListener('click', () => openChat(b.dataset.chat)));
 }
 
+function coinBurst(x, y) {
+  const count = 16;
+  for (let i = 0; i < count; i++) {
+    const coin = document.createElement('div');
+    coin.className = 'coin-particle';
+    coin.textContent = '₹';
+    coin.style.left = x + 'px';
+    coin.style.top = y + 'px';
+    const angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
+    const dist = 80 + Math.random() * 180;
+    coin.style.setProperty('--dx', (Math.cos(angle) * dist).toFixed(1) + 'px');
+    coin.style.setProperty('--dy', (Math.sin(angle) * dist * 0.6 - 40).toFixed(1) + 'px');
+    document.body.appendChild(coin);
+    setTimeout(() => coin.remove(), 1500);
+  }
+}
+
 function handleAccept(id) {
   const b = DB.bookings.find(x => x.id === id);
   if (!b || b.status !== 'pending') return;
+  const btn = document.querySelector(`[data-accept="${id}"]`);
+  if (btn) {
+    const rect = btn.getBoundingClientRect();
+    coinBurst(rect.left + rect.width / 2, rect.top + rect.height / 2);
+  }
   const prev = JSON.parse(JSON.stringify(DB.bookings));
   b.status = 'accepted'; b.decidedAt = Date.now(); b.escrow = 'held';
   let autoDeclined = 0;
@@ -1896,9 +2026,7 @@ window.addEventListener('scroll', () => { $('#topbar').classList.toggle('scrolle
   }
 })();
 
-/* =========================================================
-   🤖 AI CHATBOT
-   ========================================================= */
+/* AI CHATBOT */
 (function initChatbot() {
   const fab = document.getElementById('chatbotFab');
   const panel = document.getElementById('chatbotPanel');
@@ -2003,13 +2131,14 @@ window.addEventListener('scroll', () => { $('#topbar').classList.toggle('scrolle
     { keys: ['decline','reject','rejection','refuse'], reply: "When a creator declines, the client sees a <strong>red 'Declined' badge</strong>, their message, and a <strong>'Find similar gigs'</strong> button that jumps back to the marketplace filtered to the same category.", html: true },
     { keys: ['double booking','two bookings','multiple bookings'], reply: "Multiple pending bookings can exist on one gig, but <strong>only one can be Accepted</strong>. The moment a creator accepts, all other pendings auto-decline.", html: true },
     { keys: ['ranking','sort','order','discovery'], reply: "Default sort is <strong>newest first</strong>, with a <strong>Rising Creator boost</strong>. Clients can override via the dropdown: Newest · Top rated · Price ↑ · Price ↓", html: true },
+    { keys: ['3d','tilt','animation','card'], reply: "Gig cards have <strong>real 3D tilt</strong> — hover any card and it follows your cursor with depth. There's also a 3D hero orb and coin bursts when you accept bookings. ✨", html: true },
     { keys: ['theme','dark mode','light mode','color'], reply: "Click the <strong>🌙 / ☀️ icon</strong> in the top-right to toggle dark/light mode.", html: true },
     { keys: ['shortcut','keyboard','ctrl','hotkey'], reply: "Keyboard shortcuts:\n• <strong>Ctrl+K</strong> → command palette\n• <strong>/</strong> → focus search\n• <strong>Esc</strong> → close modals", html: true },
     { keys: ['who am i','my role','my account','acting as'], reply: () => {
         try { if (typeof userById === 'function' && typeof CURRENT_USER_ID !== 'undefined') { const me = userById(CURRENT_USER_ID); if (me) return `You're acting as <strong>${me.name}</strong> (${me.role}). Switch users from the top-right dropdown.`; } } catch(e) {}
         return "You're browsing as a guest.";
       }, html: true },
-    { keys: ['help','what can you do','how','guide','tutorial','demo'], reply: "Here's what I can help with:\n• 📝 Posting gigs & pricing\n• 🎯 AI Match & AI Draft\n• 💬 Chat & reviews\n• 💰 Escrow payments\n• 🏆 Badges & profiles\n\nJust ask!", html: true },
+    { keys: ['help','what can you do','how','guide','tutorial','demo'], reply: "Here's what I can help with:\n• 📝 Posting gigs & pricing\n• 🎯 AI Match & AI Draft\n• 💬 Chat & reviews\n• 💰 Escrow payments\n• 🏆 Badges & profiles\n• ✨ 3D animations\n\nJust ask!", html: true },
     { keys: ['thank','thanks','thx','ty'], reply: "You're welcome! 🙌 Anything else?" },
     { keys: ['bye','goodbye','see you','later','cya'], reply: "See you around! Come back anytime. 👋" },
   ];
@@ -2049,7 +2178,7 @@ window.addEventListener('scroll', () => { $('#topbar').classList.toggle('scrolle
     if (answer) {
       await botReply(answer.text, answer.html, getFollowUpChips(q));
     } else {
-      await botReply(`Hmm, I'm not sure about that one. 🤔 Try asking about:\n\n• Posting gigs\n• Booking a creator\n• AI Match or AI Draft\n• Escrow payments\n• Reviews and badges\n\nOr type <strong>"help"</strong> for the full list.`, true, ['help', 'How do I book?', 'What is AI Match?', 'How does escrow work?']);
+      await botReply(`Hmm, I'm not sure about that one. 🤔 Try asking about:\n\n• Posting gigs\n• Booking a creator\n• AI Match or AI Draft\n• Escrow payments\n• Reviews and badges\n• 3D animations\n\nOr type <strong>"help"</strong> for the full list.`, true, ['help', 'How do I book?', 'What is AI Match?', 'How does escrow work?']);
     }
   });
 })();
@@ -2059,6 +2188,7 @@ renderUserSelect();
 renderPostForm();
 renderBadges();
 renderMarketplace();
+applyParallax();
 
 window.addEventListener('storage', e => {
   if (e.key === DB_KEY) {
