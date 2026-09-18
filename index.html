@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Gigly — Where Young Creators Get Booked</title>
+<meta name="description" content="A creator gig marketplace. Post gigs, browse services, book creators, and grow." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
@@ -145,7 +146,6 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 @keyframes ticketSlide { 0%,100%{transform:translateX(0) rotate(var(--rot,0deg));} 50%{transform:translateX(10px) rotate(calc(var(--rot,0deg) + 2deg));} }
 @keyframes stamp { 0%,100%{transform:scale(1) rotate(-8deg);opacity:0.4;} 30%{transform:scale(1.15) rotate(-8deg);opacity:1;} }
 @keyframes calendarFlip { 0%,90%,100%{transform:rotateX(0deg);} 45%{transform:rotateX(-180deg);} }
-@keyframes messageFloat { 0%,100%{transform:translate(0,0);} 50%{transform:translate(8px,-10px);} }
 
 /* ================= PAGE HEAD ================= */
 .page-head { margin-bottom: 28px; margin-top: 20px; }
@@ -172,42 +172,21 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .btn-ai { background: linear-gradient(135deg, var(--cyan), var(--accent)); color: white; box-shadow: 0 6px 20px rgba(6,182,212,0.35); }
 .btn-ai:hover:not(:disabled) { box-shadow: 0 10px 28px rgba(6,182,212,0.5); transform: translateY(-1px); }
 
-/* ================= SEARCH AI BAR ================= */
-.ai-search-wrap {
-  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, var(--panel)), var(--panel));
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg); padding: 16px;
-  margin-bottom: 20px; position: relative; overflow: hidden;
-}
-.ai-search-wrap::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(139,92,246,0.06), transparent);
-  animation: aiShimmer 3s ease-in-out infinite;
-  pointer-events: none;
-}
+/* ================= AI SEARCH ================= */
+.ai-search-wrap { background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, var(--panel)), var(--panel)); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 20px; position: relative; overflow: hidden; }
+.ai-search-wrap::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(139,92,246,0.06), transparent); animation: aiShimmer 3s ease-in-out infinite; pointer-events: none; }
 @keyframes aiShimmer { 0%,100%{transform:translateX(-100%);} 50%{transform:translateX(100%);} }
 .ai-search-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 12px; font-weight: 800; color: var(--cyan); letter-spacing: 0.08em; text-transform: uppercase; }
-.ai-search-head .spark { width: 14px; height: 14px; }
 .ai-search-wrap form { display: flex; gap: 10px; position: relative; z-index: 1; }
-.ai-search-wrap input {
-  flex: 1; padding: 14px 18px; background: var(--panel-2);
-  border: 1px solid var(--border); color: var(--text);
-  border-radius: 12px; font-size: 14.5px; font-family: inherit; outline: none;
-}
+.ai-search-wrap input { flex: 1; padding: 14px 18px; background: var(--panel-2); border: 1px solid var(--border); color: var(--text); border-radius: 12px; font-size: 14.5px; font-family: inherit; outline: none; }
 .ai-search-wrap input:focus { border-color: var(--cyan); box-shadow: 0 0 0 4px rgba(6,182,212,0.2); }
 .ai-hint { font-size: 12.5px; color: var(--muted); margin-top: 8px; font-style: italic; }
-.ai-response {
-  background: var(--panel-2); border: 1px solid var(--cyan);
-  border-radius: 14px; padding: 16px; margin-bottom: 20px;
-  animation: aiSlide 0.5s cubic-bezier(0.16,1,0.3,1);
-}
+.ai-response { background: var(--panel-2); border: 1px solid var(--cyan); border-radius: 14px; padding: 16px; margin-bottom: 20px; animation: aiSlide 0.5s cubic-bezier(0.16,1,0.3,1); }
 @keyframes aiSlide { from{opacity:0;transform:translateY(-10px);} to{opacity:1;transform:none;} }
 .ai-response-head { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; color: var(--cyan); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
 .ai-response p { font-size: 14px; color: var(--text); margin-bottom: 12px; line-height: 1.55; }
 .ai-response .ai-meta { font-size: 12.5px; color: var(--text-dim); margin-bottom: 12px; }
-.ai-response .ai-meta strong { color: var(--text); }
 .ai-suggestion-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.ai-suggestion-chips .chip { font-size: 12px; padding: 6px 12px; }
 
 /* ================= FILTERS ================= */
 .filters { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
@@ -229,13 +208,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 
 /* ================= GIG GRID ================= */
 .gig-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 20px; }
-.gig-card {
-  background: var(--panel); border: 1px solid var(--border-soft);
-  border-radius: var(--radius-xl); display: flex; flex-direction: column;
-  overflow: hidden; position: relative; cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
-  animation: cardIn 0.5s cubic-bezier(0.16,1,0.3,1) backwards;
-}
+.gig-card { background: var(--panel); border: 1px solid var(--border-soft); border-radius: var(--radius-xl); display: flex; flex-direction: column; overflow: hidden; position: relative; cursor: pointer; transition: all 0.3s cubic-bezier(0.16,1,0.3,1); animation: cardIn 0.5s cubic-bezier(0.16,1,0.3,1) backwards; }
 .gig-card:nth-child(1){animation-delay:0.03s;} .gig-card:nth-child(2){animation-delay:0.06s;}
 .gig-card:nth-child(3){animation-delay:0.09s;} .gig-card:nth-child(4){animation-delay:0.12s;}
 .gig-card:nth-child(5){animation-delay:0.15s;} .gig-card:nth-child(n+6){animation-delay:0.18s;}
@@ -252,24 +225,15 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .badge.hot { background: rgba(251,146,60,0.95); box-shadow: 0 4px 12px rgba(251,146,60,0.5); }
 .badge.verified { background: linear-gradient(135deg,#3b82f6,#06b6d4); }
 .badge.top-rated { background: linear-gradient(135deg,#fbbf24,#f97316); }
-.play-video {
-  position: absolute; bottom: 12px; right: 12px;
-  width: 40px; height: 40px; border-radius: 50%;
-  background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
-  border: 2px solid rgba(255,255,255,0.4);
-  display: grid; place-items: center; color: white; z-index: 3;
-  cursor: pointer; transition: all 0.2s;
-}
+.play-video { position: absolute; bottom: 12px; right: 12px; width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.4); display: grid; place-items: center; color: white; z-index: 3; cursor: pointer; transition: all 0.2s; }
 .play-video:hover { background: var(--accent); transform: scale(1.1); }
-.play-video svg { margin-left: 2px; }
-.video-label { position: absolute; bottom: 20px; right: 60px; z-index: 3; font-size: 10px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 0.06em; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+.video-label { position: absolute; bottom: 20px; right: 60px; z-index: 3; font-size: 10px; font-weight: 800; color: white; text-transform: uppercase; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
 
 .gig-body { padding: 16px 20px; display: flex; flex-direction: column; flex: 1; gap: 10px; }
 .gig-cat { font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-2); display: flex; align-items: center; gap: 6px; }
 .gig-cat::before { content:''; width:5px; height:5px; border-radius:50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
 .gig-card h3 { font-size: 15.5px; font-weight: 800; line-height: 1.35; letter-spacing: -0.02em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .gig-card .desc { font-size: 13px; color: var(--text-dim); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-
 .gig-rating { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-dim); }
 .stars { display: inline-flex; gap: 1px; color: var(--yellow); font-size: 12px; letter-spacing: -1px; }
 .gig-rating .num { font-weight: 700; color: var(--text); }
@@ -279,7 +243,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .avatar { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 800; color: white; flex-shrink: 0; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.2), 0 2px 8px rgba(0,0,0,0.3); position: relative; }
 .avatar.lg { width: 42px; height: 42px; font-size: 14px; }
 .avatar.xl { width: 80px; height: 80px; font-size: 28px; }
-.avatar .verified-dot { position: absolute; bottom: -2px; right: -2px; width: 12px; height: 12px; background: var(--blue, #3b82f6); border-radius: 50%; border: 2px solid var(--panel); display: grid; place-items: center; font-size: 7px; }
+.avatar .verified-dot { position: absolute; bottom: -2px; right: -2px; width: 12px; height: 12px; background: #3b82f6; border-radius: 50%; border: 2px solid var(--panel); display: grid; place-items: center; font-size: 7px; color: white; }
 .gig-creator .meta { flex: 1; min-width: 0; }
 .gig-creator .name { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 5px; }
 .gig-creator .time { font-size: 11.5px; color: var(--muted); }
@@ -309,12 +273,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .input-prefix .prefix { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); font-weight: 800; pointer-events: none; }
 .input-prefix input { padding-left: 36px; }
 
-.price-suggest {
-  background: linear-gradient(135deg, color-mix(in srgb, var(--cyan) 10%, var(--panel)), var(--panel-2));
-  border: 1px solid var(--cyan);
-  border-radius: 12px; padding: 14px; margin-top: 8px;
-  animation: aiSlide 0.4s;
-}
+.price-suggest { background: linear-gradient(135deg, color-mix(in srgb, var(--cyan) 10%, var(--panel)), var(--panel-2)); border: 1px solid var(--cyan); border-radius: 12px; padding: 14px; margin-top: 8px; animation: aiSlide 0.4s; }
 .price-suggest .ps-head { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; color: var(--cyan); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
 .price-suggest .ps-range { font-size: 20px; font-weight: 900; color: var(--text); margin-bottom: 4px; }
 .price-suggest .ps-range .mid { color: var(--green); }
@@ -363,13 +322,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .status.completed { background: var(--green-soft); color: var(--green); }
 
 /* ================= ESCROW BAR ================= */
-.escrow-bar {
-  display: flex; align-items: center; gap: 4px;
-  background: var(--panel-2); border-radius: 10px;
-  padding: 10px 12px; margin-top: 10px;
-  border: 1px solid var(--border-soft);
-  font-size: 11.5px;
-}
+.escrow-bar { display: flex; align-items: center; gap: 4px; background: var(--panel-2); border-radius: 10px; padding: 10px 12px; margin-top: 10px; border: 1px solid var(--border-soft); font-size: 11.5px; }
 .escrow-step { flex: 1; display: flex; align-items: center; gap: 6px; color: var(--muted); font-weight: 700; }
 .escrow-step .dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid currentColor; display: grid; place-items: center; flex-shrink: 0; font-size: 9px; }
 .escrow-step.done { color: var(--green); }
@@ -380,20 +333,15 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .escrow-bar .line { flex: 0 0 20px; height: 2px; background: var(--border); border-radius: 1px; }
 .escrow-bar .line.done { background: var(--green); }
 
-/* ================= CHAT ================= */
-.chat-modal-body {
-  display: flex; flex-direction: column; height: 520px;
-  background: var(--panel-2); border-radius: 14px; overflow: hidden;
-  border: 1px solid var(--border);
-}
+/* ================= CHAT MODAL ================= */
+.chat-modal-body { display: flex; flex-direction: column; height: 520px; background: var(--panel-2); border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
 .chat-head { padding: 14px 18px; border-bottom: 1px solid var(--border-soft); display: flex; align-items: center; gap: 12px; background: var(--panel); }
 .chat-head .name { font-size: 14px; font-weight: 800; }
 .chat-head .sub { font-size: 11.5px; color: var(--muted); }
 .chat-head .online { font-size: 11px; color: var(--green); font-weight: 700; display: flex; align-items: center; gap: 5px; }
 .chat-head .online::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
 .chat-body { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
-.chat-day { text-align: center; font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin: 8px 0; }
-.chat-msg { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 13.5px; line-height: 1.5; position: relative; animation: msgIn 0.3s; }
+.chat-msg { max-width: 75%; padding: 10px 14px; border-radius: 16px; font-size: 13.5px; line-height: 1.5; animation: msgIn 0.3s; }
 @keyframes msgIn { from{opacity:0;transform:translateY(6px);} to{opacity:1;transform:none;} }
 .chat-msg.them { background: var(--panel); border: 1px solid var(--border-soft); align-self: flex-start; border-bottom-left-radius: 4px; }
 .chat-msg.me { background: linear-gradient(135deg,var(--accent),var(--accent-2)); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
@@ -412,12 +360,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .chat-input button:hover { opacity: 0.9; }
 
 /* ================= MODAL ================= */
-.modal-backdrop {
-  position: fixed; inset: 0; background: rgba(4,5,10,0.75);
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 200; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s;
-}
+.modal-backdrop { position: fixed; inset: 0; background: rgba(4,5,10,0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
 .modal-backdrop.open { opacity: 1; pointer-events: auto; }
 .modal { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 26px; width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto; box-shadow: var(--shadow-lg); transform: scale(0.92); transition: transform 0.32s cubic-bezier(0.16,1,0.3,1); position: relative; }
 .modal-backdrop.open .modal { transform: scale(1); }
@@ -466,11 +409,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .palette-empty { padding: 40px; text-align: center; color: var(--muted); font-size: 14px; }
 
 /* ================= PROFILE ================= */
-.profile-header {
-  background: linear-gradient(135deg, var(--accent-glow), var(--pink-glow));
-  border-radius: var(--radius-xl); padding: 32px 28px; margin-bottom: 24px;
-  position: relative; overflow: hidden;
-}
+.profile-header { background: linear-gradient(135deg, var(--accent-glow), var(--pink-glow)); border-radius: var(--radius-xl); padding: 32px 28px; margin-bottom: 24px; position: relative; overflow: hidden; }
 .profile-header::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, transparent, color-mix(in srgb, var(--panel) 70%, transparent)); pointer-events: none; }
 .profile-header > * { position: relative; z-index: 1; }
 .profile-top { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
@@ -482,12 +421,10 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 .profile-stat { display: flex; flex-direction: column; }
 .profile-stat .num { font-size: 18px; font-weight: 900; color: var(--text); }
 .profile-stat .lbl { font-size: 11px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
-
 .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-top: 16px; }
 .portfolio-item { aspect-ratio: 4/3; border-radius: 14px; overflow: hidden; position: relative; cursor: pointer; transition: all 0.25s; }
 .portfolio-item:hover { transform: scale(1.02); box-shadow: var(--shadow-lg); }
 .portfolio-item .pi-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 12px; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; font-size: 12px; font-weight: 700; }
-
 .reviews-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
 .review-card { background: var(--panel); border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 16px; }
 .review-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
@@ -540,6 +477,87 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 [data-theme="dark"] .theme-toggle .sun { transform: translateY(-100%); opacity: 0; }
 [data-theme="light"] .theme-toggle .moon { transform: translateY(100%); opacity: 0; }
 
+/* ================= 🤖 AI CHATBOT ================= */
+.chatbot-fab {
+  position: fixed; bottom: 28px; right: 28px;
+  width: 60px; height: 60px; border-radius: 50%; border: none;
+  background: linear-gradient(135deg, var(--accent), var(--pink));
+  color: white; cursor: pointer; display: grid; place-items: center;
+  box-shadow: 0 12px 32px var(--accent-glow), 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 250; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fabEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: 1.2s;
+}
+@keyframes fabEnter { from { transform: scale(0) rotate(-180deg); opacity: 0; } to { transform: scale(1) rotate(0); opacity: 1; } }
+.chatbot-fab:hover { transform: scale(1.08) translateY(-2px); box-shadow: 0 16px 40px var(--accent-glow), 0 6px 16px rgba(0,0,0,0.35); }
+.chatbot-fab:active { transform: scale(0.96); }
+.chatbot-fab .fab-icon { position: relative; z-index: 2; transition: transform 0.3s; }
+.chatbot-fab.open .fab-icon { transform: rotate(180deg) scale(0.8); }
+.chatbot-fab .fab-pulse { position: absolute; inset: 0; border-radius: 50%; background: inherit; animation: fabPulse 2.5s ease-out infinite; z-index: 1; }
+@keyframes fabPulse { 0% { transform: scale(1); opacity: 0.6; } 100% { transform: scale(1.7); opacity: 0; } }
+
+.chatbot-panel {
+  position: fixed; bottom: 100px; right: 28px; width: 380px;
+  max-width: calc(100vw - 32px); height: 580px;
+  max-height: calc(100vh - 130px);
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 22px; box-shadow: 0 24px 70px rgba(0,0,0,0.55), 0 0 0 1px var(--accent-glow);
+  display: flex; flex-direction: column; overflow: hidden; z-index: 249;
+  opacity: 0; pointer-events: none;
+  transform: translateY(20px) scale(0.96);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: bottom right;
+}
+.chatbot-panel.open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+
+.chatbot-head {
+  display: flex; align-items: center; gap: 12px; padding: 16px 18px;
+  border-bottom: 1px solid var(--border-soft);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--panel)), var(--panel));
+}
+.chatbot-avatar { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--pink)); display: grid; place-items: center; color: white; box-shadow: 0 4px 14px var(--accent-glow); flex-shrink: 0; }
+.chatbot-title { flex: 1; min-width: 0; }
+.chatbot-title .name { font-size: 14.5px; font-weight: 800; letter-spacing: -0.01em; }
+.chatbot-title .status { font-size: 11px; color: var(--muted); font-weight: 600; display: flex; align-items: center; gap: 6px; margin-top: 1px; }
+.chatbot-title .status .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); animation: livePulse 1.5s ease-in-out infinite; }
+@keyframes livePulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.4;transform:scale(0.85);} }
+.chatbot-close { background: var(--panel-2); border: 1px solid var(--border); color: var(--muted); width: 30px; height: 30px; border-radius: 9px; cursor: pointer; display: grid; place-items: center; transition: all 0.18s; }
+.chatbot-close:hover { color: var(--red); border-color: var(--red); background: var(--red-soft); }
+
+.chatbot-body { flex: 1; overflow-y: auto; padding: 18px 16px 8px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+.chatbot-body::-webkit-scrollbar { width: 8px; }
+.chatbot-body::-webkit-scrollbar-thumb { background: var(--panel-3); border-radius: 4px; }
+
+.chatbot-msg { max-width: 85%; padding: 11px 15px; border-radius: 16px; font-size: 13.5px; line-height: 1.55; animation: chatbotMsgIn 0.35s cubic-bezier(0.16, 1, 0.3, 1); word-wrap: break-word; }
+@keyframes chatbotMsgIn { from { opacity: 0; transform: translateY(8px) scale(0.96); } to { opacity: 1; transform: none; } }
+.chatbot-msg.bot { background: var(--panel-2); border: 1px solid var(--border-soft); align-self: flex-start; border-bottom-left-radius: 5px; color: var(--text); }
+.chatbot-msg.me { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: white; align-self: flex-end; border-bottom-right-radius: 5px; }
+.chatbot-msg.typing { display: flex; align-items: center; gap: 4px; padding: 14px 16px; min-width: 60px; }
+.chatbot-msg.typing span { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-2); animation: typingBounce 1.4s ease-in-out infinite; }
+.chatbot-msg.typing span:nth-child(2) { animation-delay: 0.15s; }
+.chatbot-msg.typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes typingBounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-5px); opacity: 1; } }
+.chatbot-msg strong { color: var(--accent-2); font-weight: 700; }
+.chatbot-msg.me strong { color: white; }
+
+.chatbot-suggestions { padding: 8px 16px 6px; display: flex; gap: 6px; flex-wrap: wrap; border-top: 1px solid var(--border-soft); background: var(--panel); max-height: 120px; overflow-y: auto; }
+.chatbot-suggestions:empty { display: none; }
+.chatbot-chip { background: var(--panel-2); border: 1px solid var(--border); color: var(--text-dim); font-size: 11.5px; font-weight: 600; padding: 6px 11px; border-radius: 999px; cursor: pointer; font-family: inherit; transition: all 0.18s; white-space: nowrap; }
+.chatbot-chip:hover { color: var(--accent-2); border-color: var(--accent); background: var(--panel-3); transform: translateY(-1px); }
+
+.chatbot-input { display: flex; gap: 8px; padding: 12px 14px 14px; border-top: 1px solid var(--border-soft); background: var(--panel); }
+.chatbot-input input { flex: 1; padding: 11px 15px; background: var(--panel-2); border: 1px solid var(--border); color: var(--text); border-radius: 11px; font-size: 13.5px; font-family: inherit; outline: none; transition: all 0.18s; }
+.chatbot-input input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+.chatbot-input input::placeholder { color: var(--muted); }
+.chatbot-input button { width: 42px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: white; border: none; border-radius: 11px; cursor: pointer; display: grid; place-items: center; transition: all 0.18s; flex-shrink: 0; }
+.chatbot-input button:hover { opacity: 0.9; transform: translateY(-1px); }
+.chatbot-input button:active { transform: scale(0.94); }
+
+@media (max-width: 500px) {
+  .chatbot-panel { width: calc(100vw - 24px); right: 12px; bottom: 88px; height: calc(100vh - 160px); }
+  .chatbot-fab { bottom: 88px; right: 16px; width: 54px; height: 54px; }
+}
+
 /* ================= RESPONSIVE ================= */
 @media (max-width: 900px) {
   .topbar-inner { padding: 10px 16px; }
@@ -555,14 +573,13 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 }
 @media (max-width: 480px) {
   .stat-card .stat-num { font-size: 22px; }
-  .hero-stat .num { font-size: 22px; }
   .scene { height: 120px; }
 }
 </style>
 </head>
 <body>
 
-<!-- CURSOR -->
+<!-- CURSOR LAYER -->
 <div class="cursor-layer" id="cursorLayer">
   <div class="cursor-halo" id="cursorHalo"></div>
   <div class="cursor-dot" id="cursorDot"></div>
@@ -609,7 +626,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 
   <main>
 
-    <!-- ============ MARKETPLACE ============ -->
+    <!-- MARKETPLACE -->
     <section class="view active" id="view-marketplace">
       <div class="scene">
         <svg viewBox="0 0 1200 200" preserveAspectRatio="xMidYMid slice">
@@ -642,10 +659,9 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
         <p>Describe what you need in plain English. Our AI finds the best gigs, suggests a price, and drafts your message.</p>
       </div>
 
-      <!-- ⭐ AI SEARCH -->
       <div class="ai-search-wrap">
         <div class="ai-search-head">
-          <svg class="spark" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L14 9 L21 11 L14 13 L12 20 L10 13 L3 11 L10 9 Z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L14 9 L21 11 L14 13 L12 20 L10 13 L3 11 L10 9 Z"/></svg>
           AI Match — describe your project
         </div>
         <form id="aiSearchForm">
@@ -678,7 +694,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
       <div class="gig-grid" id="gigGrid"></div>
     </section>
 
-    <!-- ============ POST A GIG ============ -->
+    <!-- POST A GIG -->
     <section class="view" id="view-post">
       <div class="scene">
         <svg viewBox="0 0 1200 200" preserveAspectRatio="xMidYMid slice">
@@ -735,7 +751,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
       </div>
     </section>
 
-    <!-- ============ DASHBOARD ============ -->
+    <!-- DASHBOARD -->
     <section class="view" id="view-dashboard">
       <div class="scene">
         <svg viewBox="0 0 1200 200" preserveAspectRatio="xMidYMid slice">
@@ -774,7 +790,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
       <div class="booking-list" id="incomingBookings"></div>
     </section>
 
-    <!-- ============ MESSAGES ============ -->
+    <!-- MESSAGES -->
     <section class="view" id="view-messages">
       <div class="page-head">
         <h1>Messages</h1>
@@ -783,7 +799,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
       <div class="booking-list" id="messagesList"></div>
     </section>
 
-    <!-- ============ MY BOOKINGS ============ -->
+    <!-- MY BOOKINGS -->
     <section class="view" id="view-bookings">
       <div class="scene">
         <svg viewBox="0 0 1200 200" preserveAspectRatio="xMidYMid slice">
@@ -825,7 +841,7 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
       <div class="booking-list" id="myBookings"></div>
     </section>
 
-    <!-- ============ PROFILE (hidden view) ============ -->
+    <!-- PROFILE -->
     <section class="view" id="view-profile">
       <button class="back-btn" id="profileBack">← Back</button>
       <div id="profileContent"></div>
@@ -950,6 +966,39 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
   </div>
 </div>
 
+<!-- 🤖 AI CHATBOT -->
+<button class="chatbot-fab" id="chatbotFab" title="Ask Gigly AI">
+  <svg class="fab-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2 L14 9 L21 11 L14 13 L12 20 L10 13 L3 11 L10 9 Z"/>
+  </svg>
+  <span class="fab-pulse"></span>
+</button>
+
+<div class="chatbot-panel" id="chatbotPanel">
+  <div class="chatbot-head">
+    <div class="chatbot-avatar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M12 2 L14 9 L21 11 L14 13 L12 20 L10 13 L3 11 L10 9 Z"/>
+      </svg>
+    </div>
+    <div class="chatbot-title">
+      <div class="name">Gigly AI</div>
+      <div class="status"><span class="dot"></span> Online · Always here</div>
+    </div>
+    <button class="chatbot-close" id="chatbotClose" aria-label="Close">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="chatbot-body" id="chatbotBody"></div>
+  <div class="chatbot-suggestions" id="chatbotSuggestions"></div>
+  <form class="chatbot-input" id="chatbotForm">
+    <input type="text" id="chatbotInput" placeholder="Ask me anything about Gigly…" autocomplete="off" />
+    <button type="submit" aria-label="Send">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+    </button>
+  </form>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast">
   <div class="toast-icon" id="toastIcon">✓</div>
@@ -961,9 +1010,8 @@ main { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 0 28px 
 /* =========================================================
    DATA LAYER
    ========================================================= */
-const DB_KEY = 'gigly_db_v4';
+const DB_KEY = 'gigly_db_v5';
 const THEME_KEY = 'gigly_theme';
-const SOUND_KEY = 'gigly_sound';
 const SESSION_KEY = 'gigly_session';
 
 const CATEGORIES = ['Design','Development','Writing','Video','Music','Marketing'];
@@ -1012,9 +1060,7 @@ if (!DB.activities) DB.activities = [];
 
 let CURRENT_USER_ID = sessionStorage.getItem(SESSION_KEY) || DB.users.find(u => u.role === 'creator').id;
 
-/* =========================================================
-   HELPERS
-   ========================================================= */
+/* HELPERS */
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const userById = id => DB.users.find(u => u.id === id);
@@ -1060,12 +1106,6 @@ function creatorBadge(user) {
   if (user.verified) return 'verified';
   return '';
 }
-function badgeHTML(user) {
-  const b = creatorBadge(user);
-  if (!b) return '';
-  const labels = { 'rising':'Rising', 'verified':'Verified', 'top-rated':'Top Rated' };
-  return `<span class="badge ${b}">${labels[b]}</span>`;
-}
 
 let toastTimer;
 function showToast(msg, type='success', undoFn=null) {
@@ -1081,80 +1121,60 @@ function showToast(msg, type='success', undoFn=null) {
   toastTimer = setTimeout(() => t.classList.remove('show'), undoFn ? 5500 : 2800);
 }
 
-/* =========================================================
-   AI LOGIC (local heuristics — no external API needed)
-   ========================================================= */
+/* AI LOGIC */
 function aiMatch(query) {
   const q = query.toLowerCase();
   const words = q.split(/\s+/).filter(w => w.length > 2);
-
-  // Extract price hint
   let priceMax = null;
   const priceMatch = q.match(/(?:under|below|less than|max|upto|up to|within)\s*₹?\s*(\d+)/);
   if (priceMatch) priceMax = Number(priceMatch[1]);
   const rupeeMatch = q.match(/₹\s*(\d+)/);
   if (!priceMax && rupeeMatch) priceMax = Number(rupeeMatch[1]);
 
-  // Detect category
   const catMap = {
-    Design:      ['logo','design','branding','poster','cover','banner','illustration','ui','ux','figma','art'],
-    Development: ['website','web','landing','app','code','develop','program','build','frontend','backend','react','html'],
-    Writing:     ['write','article','blog','copy','content','seo','essay','story','post'],
-    Video:       ['video','edit','youtube','reel','short','vlog','tiktok','movie'],
-    Music:       ['music','song','track','audio','beat','sound','compose','jingle'],
-    Marketing:   ['marketing','ads','campaign','social','instagram','facebook','promo','growth'],
+    Design:['logo','design','branding','poster','cover','banner','illustration','ui','ux','figma','art'],
+    Development:['website','web','landing','app','code','develop','program','build','frontend','backend','react','html'],
+    Writing:['write','article','blog','copy','content','seo','essay','story','post'],
+    Video:['video','edit','youtube','reel','short','vlog','tiktok','movie'],
+    Music:['music','song','track','audio','beat','sound','compose','jingle'],
+    Marketing:['marketing','ads','campaign','social','instagram','facebook','promo','growth'],
   };
-
   let detectedCat = null, catScore = 0;
   for (const [cat, kws] of Object.entries(catMap)) {
     const score = kws.filter(k => q.includes(k)).length;
     if (score > catScore) { catScore = score; detectedCat = cat; }
   }
-
-  // Score gigs
   const scored = DB.gigs.map(g => {
     let score = 0;
     const text = (g.title + ' ' + g.description + ' ' + g.category).toLowerCase();
     words.forEach(w => { if (text.includes(w)) score += 3; });
     if (detectedCat && g.category === detectedCat) score += 5;
-
     const stats = gigStats(g.id);
     if (stats.avg >= 4.5) score += 2;
-
     if (priceMax && g.rate <= priceMax) score += 4;
     else if (priceMax && g.rate > priceMax * 1.5) score -= 3;
-
     return { gig: g, score };
   }).filter(x => x.score > 0).sort((a,b) => b.score - a.score).slice(0, 3);
-
-  return { detectedCat, priceMax, gigs: scored, query };
+  return { detectedCat, priceMax, gigs: scored };
 }
 function aiPriceSuggest(category, description, title) {
   const text = (title + ' ' + description).toLowerCase();
-  const baseRanges = {
-    Design:      [800, 5000],
-    Development: [1500, 15000],
-    Writing:     [400, 3000],
-    Video:       [800, 8000],
-    Music:       [1000, 6000],
-    Marketing:   [2000, 12000],
-  };
+  const baseRanges = { Design:[800,5000], Development:[1500,15000], Writing:[400,3000], Video:[800,8000], Music:[1000,6000], Marketing:[2000,12000] };
   let [lo, hi] = baseRanges[category] || [500, 5000];
   let complexity = 1.0;
   const premium = ['revision','unlimited','premium','professional','custom','animated','complex','advanced','full','complete'];
-  const basic   = ['simple','basic','quick','small','short','minimal','single'];
+  const basic = ['simple','basic','quick','small','short','minimal','single'];
   premium.forEach(w => { if (text.includes(w)) complexity += 0.12; });
   basic.forEach(w => { if (text.includes(w)) complexity -= 0.1; });
   const wordCount = description.split(/\s+/).length;
   if (wordCount > 30) complexity += 0.1;
   complexity = Math.max(0.6, Math.min(1.8, complexity));
-
   const suggestLo = Math.round(lo * complexity / 100) * 100;
   const suggestHi = Math.round(hi * complexity / 100) * 100;
   const mid = Math.round((suggestLo + suggestHi) / 2 / 100) * 100;
   return { lo: suggestLo, hi: suggestHi, mid, complexity };
 }
-function aiDraftMessage(gig, clientName) {
+function aiDraftMessage(gig) {
   const c = gig.category.toLowerCase();
   const drafts = {
     design: `Hi! I'd love to work with you on this. I'm a small business owner and need a clean, modern design that works across print and digital. Happy to share references and get started right away. What's your typical turnaround?`,
@@ -1167,21 +1187,14 @@ function aiDraftMessage(gig, clientName) {
   return drafts[c] || `Hi! I'm interested in "${gig.title}". Can you share more about your process, deliverables, and turnaround time?`;
 }
 
-/* =========================================================
-   THEME + SESSION
-   ========================================================= */
-function applyTheme(t) {
-  document.documentElement.setAttribute('data-theme', t);
-  localStorage.setItem(THEME_KEY, t);
-}
+/* THEME */
+function applyTheme(t) { document.documentElement.setAttribute('data-theme', t); localStorage.setItem(THEME_KEY, t); }
 applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
 $('#themeToggle').addEventListener('click', () => {
   applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
 });
 
-/* =========================================================
-   NAV
-   ========================================================= */
+/* NAV */
 let previousView = 'marketplace';
 function go(view) {
   const cur = $('.view.active')?.id.replace('view-','');
@@ -1203,7 +1216,6 @@ $('#mobileNav').addEventListener('click', e => { const b = e.target.closest('but
 $('#brandHome').addEventListener('click', () => go('marketplace'));
 $('#profileBack').addEventListener('click', () => go(previousView));
 
-/* USER SWITCH */
 function renderUserSelect() {
   $('#userSelect').innerHTML = DB.users.map(u =>
     `<option value="${u.id}" ${u.id === CURRENT_USER_ID ? 'selected' : ''}>${u.name} — ${u.role === 'creator' ? 'Creator' : 'Client'}</option>`
@@ -1212,8 +1224,7 @@ function renderUserSelect() {
 $('#userSelect').addEventListener('change', e => {
   CURRENT_USER_ID = e.target.value;
   sessionStorage.setItem(SESSION_KEY, CURRENT_USER_ID);
-  const v = $('.view.active').id.replace('view-','');
-  go(v);
+  go($('.view.active').id.replace('view-',''));
   renderBadges();
   showToast(`Now acting as ${userById(CURRENT_USER_ID).name.split(' ')[0]}`, 'info');
 });
@@ -1223,43 +1234,30 @@ function renderBadges() {
   const isCreator = user.role === 'creator';
   const pBadges = [$('#pendingBadge'), $('#mobilePendingBadge')];
   const mBadges = [$('#msgBadge'), $('#mobileMsgBadge')];
-
   if (isCreator) {
     const myGigIds = DB.gigs.filter(g => g.creatorId === CURRENT_USER_ID).map(g => g.id);
     const count = DB.bookings.filter(b => myGigIds.includes(b.gigId) && b.status === 'pending').length;
     pBadges.forEach(b => { if (b) { b.textContent = count; b.style.display = count>0 ? 'inline-block' : 'none'; } });
   } else pBadges.forEach(b => { if (b) b.style.display = 'none'; });
-
-  // Unread messages
   let unread = 0;
-  Object.values(DB.messages).forEach(thread => {
-    thread.forEach(m => { if (m.to === CURRENT_USER_ID && !m.read) unread++; });
-  });
+  Object.values(DB.messages).forEach(thread => thread.forEach(m => { if (m.to === CURRENT_USER_ID && !m.read) unread++; }));
   mBadges.forEach(b => { if (b) { b.textContent = unread; b.style.display = unread>0 ? 'inline-block' : 'none'; } });
 }
 
-/* =========================================================
-   AI SEARCH
-   ========================================================= */
+/* AI SEARCH */
 $('#aiSearchForm').addEventListener('submit', e => {
   e.preventDefault();
   const q = $('#aiSearchInput').value.trim();
   if (!q) return;
   const result = aiMatch(q);
   if (!result.gigs.length) {
-    $('#aiResponseBox').innerHTML = `
-      <div class="ai-response">
-        <div class="ai-response-head">🤖 AI Match — No direct hits</div>
-        <p>I couldn't find gigs that match "<strong>${escapeHtml(q)}</strong>". Try mentioning the category — like <em>logo, website, video, article</em>.</p>
-      </div>`;
+    $('#aiResponseBox').innerHTML = `<div class="ai-response"><div class="ai-response-head">🤖 AI Match — No direct hits</div><p>I couldn't find gigs that match "<strong>${escapeHtml(q)}</strong>". Try mentioning the category — like <em>logo, website, video, article</em>.</p></div>`;
     return;
   }
-
   const top = result.gigs[0].gig;
   const priceText = result.priceMax
     ? `Your budget cap is <strong>${fmtMoney(result.priceMax)}</strong>. The best fit is <strong>${fmtMoney(top.rate)}</strong> — under budget.`
     : `Best-fit gig is priced at <strong>${fmtMoney(top.rate)}</strong>.`;
-
   $('#aiResponseBox').innerHTML = `
     <div class="ai-response">
       <div class="ai-response-head">🤖 AI Match — ${result.gigs.length} gig${result.gigs.length>1?'s':''} found${result.detectedCat ? ' in ' + result.detectedCat : ''}</div>
@@ -1269,29 +1267,21 @@ $('#aiSearchForm').addEventListener('submit', e => {
         ${result.gigs.map(x => `<button class="chip" data-gig-jump="${x.gig.id}">${escapeHtml(x.gig.title.slice(0,40))} · ${fmtMoney(x.gig.rate)}</button>`).join('')}
       </div>
     </div>`;
-
-  // Filter marketplace
   state.search = result.gigs[0].gig.title.split(' ').slice(0, 2).join(' ');
   state.category = 'all';
   $('#searchInput').value = state.search;
   renderMarketplace();
-
   $$('[data-gig-jump]').forEach(b => b.addEventListener('click', () => {
     const g = gigById(b.dataset.gigJump);
-    if (g) openBookingModal(g.id, q);
+    if (g) openBookingModal(g.id);
   }));
 });
 
-/* =========================================================
-   MARKETPLACE
-   ========================================================= */
+/* MARKETPLACE */
 let state = { search: '', category: 'all', sort: 'newest' };
 
 function isRisingCreator(cid) {
-  const accepted = DB.bookings.filter(b => {
-    const g = gigById(b.gigId);
-    return g && g.creatorId === cid && b.status === 'accepted';
-  }).length;
+  const accepted = DB.bookings.filter(b => { const g = gigById(b.gigId); return g && g.creatorId === cid && b.status === 'accepted'; }).length;
   return accepted === 0;
 }
 
@@ -1299,10 +1289,7 @@ function getVisibleGigs() {
   let list = [...DB.gigs];
   if (state.category !== 'all') list = list.filter(g => g.category === state.category);
   const q = state.search.trim().toLowerCase();
-  if (q) list = list.filter(g =>
-    g.title.toLowerCase().includes(q) || g.description.toLowerCase().includes(q) || g.category.toLowerCase().includes(q)
-  );
-
+  if (q) list = list.filter(g => g.title.toLowerCase().includes(q) || g.description.toLowerCase().includes(q) || g.category.toLowerCase().includes(q));
   if (state.sort === 'newest')    list.sort((a,b) => b.createdAt - a.createdAt);
   if (state.sort === 'rate-asc')  list.sort((a,b) => a.rate - b.rate);
   if (state.sort === 'rate-desc') list.sort((a,b) => b.rate - a.rate);
@@ -1314,18 +1301,11 @@ function renderMarketplace() {
   renderCategoryChips();
   const gigs = getVisibleGigs();
   const grid = $('#gigGrid');
-
   if (!gigs.length) {
     const filtering = state.search.trim() || state.category !== 'all';
-    grid.innerHTML = `<div class="empty" style="grid-column: 1/-1;">
-      <div class="icon">🔍</div>
-      <h3>${filtering ? 'No gigs match' : 'No gigs yet'}</h3>
-      <p>${filtering ? 'Try clearing filters or a different keyword.' : 'Be the first to post.'}</p>
-      ${filtering ? `<button class="btn btn-ghost" onclick="resetFilters()">Clear filters</button>` : ''}
-    </div>`;
+    grid.innerHTML = `<div class="empty" style="grid-column: 1/-1;"><div class="icon">🔍</div><h3>${filtering ? 'No gigs match' : 'No gigs yet'}</h3><p>${filtering ? 'Try clearing filters or a different keyword.' : 'Be the first to post.'}</p>${filtering ? `<button class="btn btn-ghost" onclick="resetFilters()">Clear filters</button>` : ''}</div>`;
     return;
   }
-
   grid.innerHTML = gigs.map(g => {
     const creator = userById(g.creatorId);
     const [c1, c2] = CATEGORY_GRADIENTS[g.category] || ['#8b5cf6','#ec4899'];
@@ -1334,33 +1314,22 @@ function renderMarketplace() {
     const badge = creatorBadge(creator);
     const badgeLabel = badge === 'rising' ? 'Rising' : badge === 'top-rated' ? 'Top Rated' : badge === 'verified' ? 'Verified' : '';
     const stars = '★'.repeat(Math.round(stats.avg)) + '☆'.repeat(5 - Math.round(stats.avg));
-
     return `
       <div class="gig-card" data-gig-id="${g.id}">
         <div class="gig-cover" style="background: linear-gradient(135deg, ${c1}, ${c2});">
           <div class="cover-cat">${escapeHtml(g.category.slice(0,2).toUpperCase())}</div>
-          <div class="badges">
-            ${badge ? `<span class="badge ${badge}">${badgeLabel}</span>` : '<span></span>'}
-            ${(Date.now() - g.createdAt < 1000*60*60*6) ? '<span class="badge hot">New</span>' : '<span></span>'}
-          </div>
-          ${g.hasVideo ? `
-            <div class="video-label">15-sec intro</div>
-            <div class="play-video" data-video="${g.id}">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            </div>` : ''}
+          <div class="badges">${badge ? `<span class="badge ${badge}">${badgeLabel}</span>` : '<span></span>'}${(Date.now() - g.createdAt < 1000*60*60*6) ? '<span class="badge hot">New</span>' : '<span></span>'}</div>
+          ${g.hasVideo ? `<div class="video-label">15-sec intro</div><div class="play-video" data-video="${g.id}"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>` : ''}
         </div>
         <div class="gig-body">
           <div class="gig-cat">${escapeHtml(g.category)}</div>
           <h3>${escapeHtml(g.title)}</h3>
           <p class="desc">${escapeHtml(g.description)}</p>
-          <div class="gig-rating">
-            <span class="stars">${stars}</span>
-            ${stats.count ? `<span class="num">${stats.avg}</span><span class="count">(${stats.count})</span>` : '<span class="count">New gig</span>'}
-          </div>
+          <div class="gig-rating"><span class="stars">${stars}</span>${stats.count ? `<span class="num">${stats.avg}</span><span class="count">(${stats.count})</span>` : '<span class="count">New gig</span>'}</div>
           <div class="gig-creator" data-creator="${creator.id}">
             ${avatarHTML(creator)}
             <div class="meta">
-              <div class="name">${escapeHtml(creator.name)} ${creator.verified ? '<span style="color:var(--blue,#3b82f6);">✓</span>' : ''}</div>
+              <div class="name">${escapeHtml(creator.name)} ${creator.verified ? '<span style="color:#3b82f6;">✓</span>' : ''}</div>
               <div class="time">${cStats.count > 0 ? cStats.count + ' reviews · ' : ''}${creator.responseHrs ? 'responds in ~' + creator.responseHrs + 'h' : timeAgo(g.createdAt)}</div>
             </div>
           </div>
@@ -1371,7 +1340,6 @@ function renderMarketplace() {
         </div>
       </div>`;
   }).join('');
-
   grid.querySelectorAll('[data-book]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); openBookingModal(b.dataset.book); }));
   grid.querySelectorAll('[data-video]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); $('#videoModal').classList.add('open'); }));
   grid.querySelectorAll('[data-creator]').forEach(el => el.addEventListener('click', e => { e.stopPropagation(); openProfile(el.dataset.creator); }));
@@ -1391,7 +1359,6 @@ function renderCategoryChips() {
     renderMarketplace();
   }));
 }
-
 window.resetFilters = () => { state.search=''; state.category='all'; $('#searchInput').value=''; renderMarketplace(); };
 
 let searchTimer;
@@ -1401,16 +1368,11 @@ $('#searchInput').addEventListener('input', e => {
 });
 $('#sortSelect').addEventListener('change', e => { state.sort = e.target.value; renderMarketplace(); });
 
-/* =========================================================
-   POST A GIG + AI PRICE
-   ========================================================= */
+/* POST A GIG */
 function renderPostForm() {
   $('#gCategory').innerHTML = `<option value="" disabled selected>Choose a category…</option>` + CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
 }
-$('#gDesc').addEventListener('input', e => {
-  $('#descCount').textContent = e.target.value.length;
-  maybeSuggestPrice();
-});
+$('#gDesc').addEventListener('input', e => { $('#descCount').textContent = e.target.value.length; maybeSuggestPrice(); });
 $('#gCategory').addEventListener('change', maybeSuggestPrice);
 $('#gTitle').addEventListener('input', maybeSuggestPrice);
 
@@ -1422,16 +1384,10 @@ function maybeSuggestPrice() {
   const s = aiPriceSuggest(cat, desc, title);
   $('#priceSuggestBox').innerHTML = `
     <div class="price-suggest">
-      <div class="ps-head">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L14 9 L21 11 L14 13 L12 20 L10 13 L3 11 L10 9 Z"/></svg>
-        AI Price Suggestion
-      </div>
+      <div class="ps-head"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L14 9 L21 11 L14 13 L12 20 L10 13 L3 11 L10 9 Z"/></svg>AI Price Suggestion</div>
       <div class="ps-range">${fmtMoney(s.lo)} — <span class="mid">${fmtMoney(s.mid)}</span> — ${fmtMoney(s.hi)}</div>
       <div class="ps-why">Based on your description (${desc.split(/\s+/).length} words, complexity ${(s.complexity*100).toFixed(0)}%), similar ${cat} gigs typically sell in this range.</div>
-      <div class="ps-actions">
-        <button type="button" class="btn btn-ghost btn-sm" data-use-price="${s.mid}">Use ₹${s.mid.toLocaleString('en-IN')}</button>
-        <button type="button" class="btn btn-ghost btn-sm" data-use-price="${s.lo}">Use lowest</button>
-      </div>
+      <div class="ps-actions"><button type="button" class="btn btn-ghost btn-sm" data-use-price="${s.mid}">Use ₹${s.mid.toLocaleString('en-IN')}</button><button type="button" class="btn btn-ghost btn-sm" data-use-price="${s.lo}">Use lowest</button></div>
     </div>`;
   $$('[data-use-price]').forEach(b => b.addEventListener('click', () => { $('#gRate').value = b.dataset.usePrice; }));
 }
@@ -1447,32 +1403,24 @@ $('#gigForm').addEventListener('submit', e => {
   const gig = { id: uid('g'), creatorId: CURRENT_USER_ID, title, category, rate, description, hasVideo, createdAt: Date.now() };
   DB.gigs.push(gig);
   saveDB();
-  pushActivity(`${userById(CURRENT_USER_ID).name} posted "${title.slice(0, 40)}"`, userById(CURRENT_USER_ID).name.split(' ')[0]);
   $('#gigForm').reset();
   $('#descCount').textContent = '0';
   $('#priceSuggestBox').innerHTML = '';
   showToast('Gig published!');
-  state.sort = 'newest'; state.category='all'; state.search=''; $('#searchInput').value='';
+  state.sort='newest'; state.category='all'; state.search=''; $('#searchInput').value='';
   go('marketplace');
 });
 
-/* =========================================================
-   BOOKING MODAL
-   ========================================================= */
-let currentAiQuery = null;
-
-function openBookingModal(gigId, aiQuery = null) {
+/* BOOKING */
+function openBookingModal(gigId) {
   const g = gigById(gigId); if (!g) return;
   const creator = userById(g.creatorId);
-  const stats = gigStats(gigId);
   $('#modalGigId').value = gigId;
-  currentAiQuery = aiQuery;
   $('#modalSummary').innerHTML = `
     <div class="row"><span class="k">Gig</span><span class="v">${escapeHtml(g.title)}</span></div>
     <div class="row"><span class="k">Creator</span><span class="v">${escapeHtml(creator.name)} ${creator.verified?'✓':''}</span></div>
     <div class="row"><span class="k">Price</span><span class="v" style="color:var(--green);">${fmtMoney(g.rate)}</span></div>
-    <div class="row"><span class="k">Escrow</span><span class="v" style="color:var(--cyan);">50% / 50% milestones</span></div>
-  `;
+    <div class="row"><span class="k">Escrow</span><span class="v" style="color:var(--cyan);">50% / 50% milestones</span></div>`;
   const me = userById(CURRENT_USER_ID);
   $('#bName').value = me.role === 'client' ? me.name : '';
   $('#bMessage').value = '';
@@ -1483,10 +1431,9 @@ function openBookingModal(gigId, aiQuery = null) {
 $('#aiDraftBtn').addEventListener('click', () => {
   const g = gigById($('#modalGigId').value);
   if (!g) return;
-  const me = userById(CURRENT_USER_ID);
-  $('#bMessage').value = aiDraftMessage(g, me.name);
+  $('#bMessage').value = aiDraftMessage(g);
   $('#msgCount').textContent = $('#bMessage').value.length;
-  showToast('AI drafted your message — edit as needed', 'info');
+  showToast('AI drafted your message', 'info');
 });
 
 $('#bMessage').addEventListener('input', e => { $('#msgCount').textContent = e.target.value.length; });
@@ -1498,19 +1445,10 @@ $('#bookingForm').addEventListener('submit', e => {
   const message = $('#bMessage').value.trim();
   if (!gigId || !name || !message) return;
   const g = gigById(gigId); if (!g) return;
-  const booking = {
-    id: uid('b'), gigId, clientId: CURRENT_USER_ID, clientName: name,
-    message, status: 'pending', escrow: 'none',
-    createdAt: Date.now(),
-  };
+  const booking = { id: uid('b'), gigId, clientId: CURRENT_USER_ID, clientName: name, message, status: 'pending', escrow: 'none', createdAt: Date.now() };
   DB.bookings.push(booking);
-  // Seed first message in thread
-  const threadId = booking.id;
-  DB.messages[threadId] = [
-    { id: uid('m'), from: CURRENT_USER_ID, to: g.creatorId, text: message, at: Date.now(), read: false }
-  ];
+  DB.messages[booking.id] = [{ id: uid('m'), from: CURRENT_USER_ID, to: g.creatorId, text: message, at: Date.now(), read: false }];
   saveDB();
-  pushActivity(`${name.split(' ')[0]} booked "${g.title.slice(0,35)}"`, name.split(' ')[0]);
   closeAllModals();
   $('#confirmText').innerHTML = `Your request for <strong>${escapeHtml(g.title)}</strong> was sent to <strong>${escapeHtml(userById(g.creatorId).name)}</strong>.<br>You'll be notified when they respond.`;
   $('#confirmModal').classList.add('open');
@@ -1520,9 +1458,7 @@ $('#bookingForm').addEventListener('submit', e => {
 $('#confirmClose').addEventListener('click', () => { $('#confirmModal').classList.remove('open'); go('marketplace'); });
 $('#confirmViewBookings').addEventListener('click', () => { $('#confirmModal').classList.remove('open'); go('bookings'); });
 
-/* =========================================================
-   DASHBOARD
-   ========================================================= */
+/* DASHBOARD */
 function renderDashboard() {
   const user = userById(CURRENT_USER_ID);
   if (user.role !== 'creator') {
@@ -1534,7 +1470,6 @@ function renderDashboard() {
   const myGigs = DB.gigs.filter(g => g.creatorId === CURRENT_USER_ID);
   const myGigIds = myGigs.map(g => g.id);
   const incoming = DB.bookings.filter(b => myGigIds.includes(b.gigId)).sort((a,b) => b.createdAt - a.createdAt);
-
   const pending = incoming.filter(b => b.status === 'pending').length;
   const accepted = incoming.filter(b => b.status === 'accepted').length;
   const completed = incoming.filter(b => b.status === 'completed').length;
@@ -1546,14 +1481,13 @@ function renderDashboard() {
     <div class="stat-card yellow"><div class="stat-num">${pending}</div><div class="stat-lbl">Pending</div></div>
     <div class="stat-card green"><div class="stat-num">${completed}</div><div class="stat-lbl">Completed</div></div>
     <div class="stat-card green"><div class="stat-num">${fmtMoney(earned)}</div><div class="stat-lbl">Earned</div></div>
-    <div class="stat-card cyan"><div class="stat-num">${cStats.avg || '—'}</div><div class="stat-lbl">Rating (${cStats.count})</div></div>
-  `;
+    <div class="stat-card cyan"><div class="stat-num">${cStats.avg || '—'}</div><div class="stat-lbl">Rating (${cStats.count})</div></div>`;
 
   const achs = [
-    { emoji:'🌱', name:'First gig',     earned: myGigs.length >= 1 },
+    { emoji:'🌱', name:'First gig', earned: myGigs.length >= 1 },
     { emoji:'🎯', name:'First booking', earned: accepted >= 1 },
-    { emoji:'💰', name:'₹5K earned',    earned: earned >= 5000 },
-    { emoji:'🏆', name:'₹10K earned',   earned: earned >= 10000 },
+    { emoji:'💰', name:'₹5K earned', earned: earned >= 5000 },
+    { emoji:'🏆', name:'₹10K earned', earned: earned >= 10000 },
     { emoji:'⭐', name:'5-star reviewed', earned: cStats.avg >= 4.8 && cStats.count >= 2 },
   ];
   $('#achievementsWrap').innerHTML = `<div style="display:flex; gap:8px; flex-wrap:wrap; padding: 12px 0 4px;">${achs.map(a => `<span style="display:inline-flex; align-items:center; gap:6px; padding: 7px 13px; border-radius:999px; background:var(--panel-2); border:1px solid ${a.earned?'var(--accent)':'var(--border)'}; font-size:12px; font-weight:700; color:${a.earned?'var(--accent-3)':'var(--text-dim)'};">${a.emoji} ${a.name}</span>`).join('')}</div>`;
@@ -1562,72 +1496,23 @@ function renderDashboard() {
     $('#incomingBookings').innerHTML = `<div class="empty"><div class="icon">📭</div><h3>No bookings yet</h3><p>Publish a gig to start receiving requests.</p><button class="btn btn-primary" onclick="go('post')">Post a gig</button></div>`;
     return;
   }
-
   $('#incomingBookings').innerHTML = incoming.map(b => bookingCardHTML(b, true)).join('');
   attachBookingListeners($('#incomingBookings'));
 }
 
-/* =========================================================
-   BOOKING CARD (shared)
-   ========================================================= */
+/* BOOKING CARD */
 function escrowHTML(booking) {
-  if (booking.status === 'pending') {
-    return `<div class="escrow-bar">
-      <div class="escrow-step"><span class="dot">1</span>Request</div>
-      <span class="line"></span>
-      <div class="escrow-step"><span class="dot">2</span>Accept</div>
-      <span class="line"></span>
-      <div class="escrow-step"><span class="dot">3</span>Escrow 50%</div>
-      <span class="line"></span>
-      <div class="escrow-step"><span class="dot">4</span>Deliver</div>
-      <span class="line"></span>
-      <div class="escrow-step"><span class="dot">5</span>Release 50%</div>
-    </div>`;
-  }
-  if (booking.status === 'declined') {
-    return `<div class="escrow-bar" style="opacity:0.5;">
-      <div class="escrow-step"><span class="dot">✕</span>Request declined</div>
-    </div>`;
-  }
-  if (booking.status === 'accepted') {
-    return `<div class="escrow-bar">
-      <div class="escrow-step done"><span class="dot">✓</span>Request</div>
-      <span class="line done"></span>
-      <div class="escrow-step done"><span class="dot">✓</span>Accepted</div>
-      <span class="line done"></span>
-      <div class="escrow-step active"><span class="dot">●</span>Escrow 50% held</div>
-      <span class="line"></span>
-      <div class="escrow-step"><span class="dot">4</span>Deliver</div>
-      <span class="line"></span>
-      <div class="escrow-step"><span class="dot">5</span>Release</div>
-    </div>`;
-  }
-  if (booking.status === 'delivered') {
-    return `<div class="escrow-bar">
-      <div class="escrow-step done"><span class="dot">✓</span>Request</div>
-      <span class="line done"></span>
-      <div class="escrow-step done"><span class="dot">✓</span>Accepted</div>
-      <span class="line done"></span>
-      <div class="escrow-step done"><span class="dot">✓</span>Escrow held</div>
-      <span class="line done"></span>
-      <div class="escrow-step done"><span class="dot">✓</span>Delivered</div>
-      <span class="line"></span>
-      <div class="escrow-step active"><span class="dot">●</span>Awaiting release</div>
-    </div>`;
-  }
-  if (booking.status === 'completed') {
-    return `<div class="escrow-bar">
-      <div class="escrow-step done"><span class="dot">✓</span>Request</div>
-      <span class="line done"></span>
-      <div class="escrow-step done"><span class="dot">✓</span>Accepted</div>
-      <span class="line done"></span>
-      <div class="escrow-step done"><span class="dot">✓</span>Escrow held</div>
-      <span class="line done"></span>
-      <div class="escrow-step done"><span class="dot">✓</span>Delivered</div>
-      <span class="line done"></span>
-      <div class="escrow-step done"><span class="dot">✓</span>Paid out</div>
-    </div>`;
-  }
+  const step = (label, state) => {
+    const cls = state === 'done' ? 'done' : state === 'active' ? 'active' : '';
+    const dot = state === 'done' ? '✓' : state === 'active' ? '●' : '○';
+    return `<div class="escrow-step ${cls}"><span class="dot">${dot}</span>${label}</div>`;
+  };
+  const s = booking.status;
+  if (s === 'declined') return `<div class="escrow-bar" style="opacity:0.5;"><div class="escrow-step"><span class="dot">✕</span>Request declined</div></div>`;
+  if (s === 'pending') return `<div class="escrow-bar">${step('Request','active')}<span class="line"></span>${step('Accept','')}<span class="line"></span>${step('Escrow 50%','')}<span class="line"></span>${step('Deliver','')}<span class="line"></span>${step('Release','')}</div>`;
+  if (s === 'accepted') return `<div class="escrow-bar">${step('Request','done')}<span class="line done"></span>${step('Accepted','done')}<span class="line done"></span>${step('Escrow 50%','active')}<span class="line"></span>${step('Deliver','')}<span class="line"></span>${step('Release','')}</div>`;
+  if (s === 'delivered') return `<div class="escrow-bar">${step('Request','done')}<span class="line done"></span>${step('Accepted','done')}<span class="line done"></span>${step('Escrow','done')}<span class="line done"></span>${step('Delivered','done')}<span class="line"></span>${step('Awaiting release','active')}</div>`;
+  if (s === 'completed') return `<div class="escrow-bar">${step('Request','done')}<span class="line done"></span>${step('Accepted','done')}<span class="line done"></span>${step('Escrow','done')}<span class="line done"></span>${step('Delivered','done')}<span class="line done"></span>${step('Paid out','done')}</div>`;
   return '';
 }
 
@@ -1636,45 +1521,29 @@ function bookingCardHTML(b, isCreatorView) {
   const otherId = isCreatorView ? b.clientId : (g ? g.creatorId : null);
   const other = userById(otherId);
   const title = g ? g.title : 'Deleted gig';
-
   const statusLabels = { pending:'Pending', accepted:'Accepted', declined:'Declined', delivered:'Delivered', completed:'Completed' };
-  const msgCount = (DB.messages[b.id] || []).length;
   const unread = (DB.messages[b.id] || []).filter(m => m.to === CURRENT_USER_ID && !m.read).length;
-
   let actions = '';
-  if (b.status === 'pending') {
-    if (isCreatorView) {
-      actions = `<button class="btn btn-success btn-sm" data-accept="${b.id}">Accept</button>
-                 <button class="btn btn-danger btn-sm" data-decline="${b.id}">Decline</button>`;
-    }
-  } else if (b.status === 'accepted') {
-    if (isCreatorView) actions = `<button class="btn btn-primary btn-sm" data-deliver="${b.id}">Mark Delivered</button>`;
-    else actions = `<span style="font-size:11.5px; color: var(--cyan); font-weight: 700;">50% held in escrow</span>`;
-  } else if (b.status === 'delivered') {
-    if (!isCreatorView) actions = `<button class="btn btn-success btn-sm" data-release="${b.id}">Release Payment</button>`;
-    else actions = `<span style="font-size:11.5px; color: var(--yellow); font-weight: 700;">Awaiting client</span>`;
-  } else if (b.status === 'completed') {
-    if (!isCreatorView) {
-      const hasReview = DB.reviews.some(r => r.bookingId === b.id);
-      if (!hasReview) actions = `<button class="btn btn-ghost btn-sm" data-review="${b.id}">★ Leave Review</button>`;
-      else actions = `<span style="font-size:11.5px; color: var(--green); font-weight: 700;">✓ Reviewed</span>`;
-    }
+  if (b.status === 'pending' && isCreatorView) {
+    actions = `<button class="btn btn-success btn-sm" data-accept="${b.id}">Accept</button><button class="btn btn-danger btn-sm" data-decline="${b.id}">Decline</button>`;
+  } else if (b.status === 'accepted' && isCreatorView) {
+    actions = `<button class="btn btn-primary btn-sm" data-deliver="${b.id}">Mark Delivered</button>`;
+  } else if (b.status === 'accepted' && !isCreatorView) {
+    actions = `<span style="font-size:11.5px; color: var(--cyan); font-weight: 700;">50% held in escrow</span>`;
+  } else if (b.status === 'delivered' && !isCreatorView) {
+    actions = `<button class="btn btn-success btn-sm" data-release="${b.id}">Release Payment</button>`;
+  } else if (b.status === 'completed' && !isCreatorView) {
+    const hasReview = DB.reviews.some(r => r.bookingId === b.id);
+    actions = hasReview ? `<span style="font-size:11.5px; color: var(--green); font-weight: 700;">✓ Reviewed</span>` : `<button class="btn btn-ghost btn-sm" data-review="${b.id}">★ Leave Review</button>`;
   }
-
   const extra = b.status === 'declined' && b.reason ? `<div class="reason">Reason: ${escapeHtml(b.reason)}</div>` : '';
-
   return `
     <div class="booking-card">
       <div class="booking-main">
         ${avatarHTML(other, 'lg')}
         <div class="info">
           <h4>${escapeHtml(title)}</h4>
-          <div class="meta">
-            <span>${isCreatorView ? '👤' : 'by'} ${escapeHtml(other ? other.name : 'Unknown')}</span>
-            <span class="dot">·</span>
-            <span>${timeAgo(b.createdAt)}</span>
-            ${g ? `<span class="dot">·</span><span style="color:var(--green);font-weight:600;">${fmtMoney(g.rate)}</span>` : ''}
-          </div>
+          <div class="meta"><span>${isCreatorView ? '👤' : 'by'} ${escapeHtml(other ? other.name : 'Unknown')}</span><span class="dot">·</span><span>${timeAgo(b.createdAt)}</span>${g ? `<span class="dot">·</span><span style="color:var(--green);font-weight:600;">${fmtMoney(g.rate)}</span>` : ''}</div>
           <div class="msg">"${escapeHtml(b.message)}"</div>
           ${extra}
           ${escrowHTML(b)}
@@ -1682,9 +1551,7 @@ function bookingCardHTML(b, isCreatorView) {
       </div>
       <div class="booking-actions">
         <span class="status ${b.status}">${statusLabels[b.status] || b.status}</span>
-        <button class="btn btn-ghost btn-sm" data-chat="${b.id}">
-          💬 Chat${unread ? ` <span style="background:var(--red); color:white; padding:1px 6px; border-radius:999px; font-size:10px; margin-left:4px;">${unread}</span>` : ''}
-        </button>
+        <button class="btn btn-ghost btn-sm" data-chat="${b.id}">💬 Chat${unread ? ` <span style="background:var(--red); color:white; padding:1px 6px; border-radius:999px; font-size:10px; margin-left:4px;">${unread}</span>` : ''}</button>
         ${actions}
       </div>
     </div>`;
@@ -1703,56 +1570,40 @@ function handleAccept(id) {
   const b = DB.bookings.find(x => x.id === id);
   if (!b || b.status !== 'pending') return;
   const prev = JSON.parse(JSON.stringify(DB.bookings));
-  b.status = 'accepted';
-  b.decidedAt = Date.now();
-  b.escrow = 'held';
+  b.status = 'accepted'; b.decidedAt = Date.now(); b.escrow = 'held';
   let autoDeclined = 0;
-  DB.bookings.forEach(o => {
-    if (o.id !== b.id && o.gigId === b.gigId && o.status === 'pending') {
-      o.status = 'declined';
-      o.reason = 'Gig was filled by another booking.';
-      autoDeclined++;
-    }
-  });
+  DB.bookings.forEach(o => { if (o.id !== b.id && o.gigId === b.gigId && o.status === 'pending') { o.status = 'declined'; o.reason = 'Gig was filled by another booking.'; autoDeclined++; } });
   saveDB();
-  const msg = autoDeclined ? `Accepted. ${autoDeclined} other request${autoDeclined>1?'s':''} auto-declined.` : 'Booking accepted. 50% moved to escrow.';
-  showToast(msg, 'success', () => { DB.bookings = prev; saveDB(); renderDashboard(); renderBadges(); showToast('Reverted.'); });
-  renderDashboard();
-  renderBadges();
+  showToast(autoDeclined ? `Accepted. ${autoDeclined} other${autoDeclined>1?'s':''} auto-declined.` : 'Booking accepted. 50% moved to escrow.', 'success', () => { DB.bookings = prev; saveDB(); renderDashboard(); renderBadges(); showToast('Reverted.'); });
+  renderDashboard(); renderBadges();
 }
 function handleDecline(id) {
   const b = DB.bookings.find(x => x.id === id);
   if (!b || b.status !== 'pending') return;
   const prev = JSON.parse(JSON.stringify(DB.bookings));
-  b.status = 'declined';
-  b.decidedAt = Date.now();
+  b.status = 'declined'; b.decidedAt = Date.now();
   saveDB();
   showToast('Booking declined.', 'info', () => { DB.bookings = prev; saveDB(); renderDashboard(); renderBadges(); showToast('Reverted.'); });
-  renderDashboard();
-  renderBadges();
+  renderDashboard(); renderBadges();
 }
 function handleDeliver(id) {
   const b = DB.bookings.find(x => x.id === id);
   if (!b || b.status !== 'accepted') return;
-  b.status = 'delivered';
-  b.deliveredAt = Date.now();
+  b.status = 'delivered'; b.deliveredAt = Date.now();
   saveDB();
-  showToast('Marked as delivered. Client notified to release payment.', 'success');
+  showToast('Marked delivered. Client notified.', 'success');
   renderDashboard();
 }
 function handleRelease(id) {
   const b = DB.bookings.find(x => x.id === id);
   if (!b || b.status !== 'delivered') return;
-  b.status = 'completed';
-  b.completedAt = Date.now();
+  b.status = 'completed'; b.completedAt = Date.now();
   saveDB();
-  showToast('Payment released to creator. 🎉', 'success');
+  showToast('Payment released. 🎉', 'success');
   renderMyBookings();
 }
 
-/* =========================================================
-   MY BOOKINGS
-   ========================================================= */
+/* MY BOOKINGS */
 function renderMyBookings() {
   const mine = DB.bookings.filter(b => b.clientId === CURRENT_USER_ID).sort((a,b) => b.createdAt - a.createdAt);
   const list = $('#myBookings');
@@ -1764,9 +1615,7 @@ function renderMyBookings() {
   attachBookingListeners(list);
 }
 
-/* =========================================================
-   MESSAGES LIST
-   ========================================================= */
+/* MESSAGES */
 function renderMessages() {
   const mine = DB.bookings.filter(b => b.clientId === CURRENT_USER_ID || (gigById(b.gigId)?.creatorId === CURRENT_USER_ID));
   mine.sort((a,b) => b.createdAt - a.createdAt);
@@ -1792,17 +1641,13 @@ function renderMessages() {
             <div class="msg">${last ? escapeHtml((last.from === CURRENT_USER_ID ? 'You: ' : '') + last.text.slice(0, 80)) : 'No messages yet'}</div>
           </div>
         </div>
-        <div class="booking-actions">
-          <span class="status ${b.status}">${b.status}</span>
-        </div>
+        <div class="booking-actions"><span class="status ${b.status}">${b.status}</span></div>
       </div>`;
   }).join('');
   list.querySelectorAll('[data-chat]').forEach(el => el.addEventListener('click', () => openChat(el.dataset.chat)));
 }
 
-/* =========================================================
-   CHAT
-   ========================================================= */
+/* CHAT */
 let activeChatBookingId = null;
 let chatPollTimer = null;
 
@@ -1813,41 +1658,16 @@ function openChat(bookingId) {
   const g = gigById(b.gigId);
   const isCreator = g && g.creatorId === CURRENT_USER_ID;
   const other = isCreator ? userById(b.clientId) : userById(g.creatorId);
-
-  // Mark messages as read
   let changed = false;
-  (DB.messages[bookingId] || []).forEach(m => {
-    if (m.to === CURRENT_USER_ID && !m.read) { m.read = true; changed = true; }
-  });
+  (DB.messages[bookingId] || []).forEach(m => { if (m.to === CURRENT_USER_ID && !m.read) { m.read = true; changed = true; } });
   if (changed) saveDB();
-
-  $('#chatHead').innerHTML = `
-    ${avatarHTML(other, 'lg')}
-    <div style="flex:1; min-width:0;">
-      <div class="name">${escapeHtml(other?.name || 'Unknown')}</div>
-      <div class="sub">${escapeHtml(g?.title || '')}</div>
-    </div>
-    <div class="online">Online</div>
-  `;
+  $('#chatHead').innerHTML = `${avatarHTML(other, 'lg')}<div style="flex:1; min-width:0;"><div class="name">${escapeHtml(other?.name || 'Unknown')}</div><div class="sub">${escapeHtml(g?.title || '')}</div></div><div class="online">Online</div>`;
   renderChatThread();
   $('#chatModal').classList.add('open');
   setTimeout(() => $('#chatInput').focus(), 200);
   renderBadges();
-
   clearInterval(chatPollTimer);
-  chatPollTimer = setInterval(() => {
-    if (!activeChatBookingId) return;
-    const before = JSON.stringify(DB.messages[activeChatBookingId]);
-    DB = JSON.parse(localStorage.getItem(DB_KEY) || '{}');
-    const after = JSON.stringify(DB.messages[activeChatBookingId]);
-    if (before !== after) {
-      (DB.messages[activeChatBookingId] || []).forEach(m => {
-        if (m.to === CURRENT_USER_ID && !m.read) m.read = true;
-      });
-      saveDB();
-      renderChatThread();
-    }
-  }, 1200);
+  chatPollTimer = setInterval(() => { if (activeChatBookingId) { renderChatThread(); renderBadges(); } }, 1500);
 }
 
 function renderChatThread() {
@@ -1856,11 +1676,7 @@ function renderChatThread() {
   $('#chatBody').innerHTML = thread.map(m => {
     const mine = m.from === CURRENT_USER_ID;
     const readMark = mine && m.read ? '<span class="read">✓✓</span>' : mine ? '✓' : '';
-    return `
-      <div class="chat-msg ${mine ? 'me' : 'them'}">
-        <div>${escapeHtml(m.text)}</div>
-        <div class="time">${new Date(m.at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} ${readMark}</div>
-      </div>`;
+    return `<div class="chat-msg ${mine ? 'me' : 'them'}"><div>${escapeHtml(m.text)}</div><div class="time">${new Date(m.at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})} ${readMark}</div></div>`;
   }).join('');
   const body = $('#chatBody');
   body.scrollTop = body.scrollHeight;
@@ -1877,45 +1693,27 @@ function sendChat() {
   const g = gigById(b.gigId);
   const isCreator = g && g.creatorId === CURRENT_USER_ID;
   const to = isCreator ? b.clientId : g.creatorId;
-
   if (!DB.messages[activeChatBookingId]) DB.messages[activeChatBookingId] = [];
   DB.messages[activeChatBookingId].push({ id: uid('m'), from: CURRENT_USER_ID, to, text, at: Date.now(), read: false });
   saveDB();
   $('#chatInput').value = '';
   renderChatThread();
-
-  // Simulate a reply from the other side after a delay (demo feel)
   const replyDelay = 1200 + Math.random() * 1500;
   setTimeout(() => {
     if (!activeChatBookingId) return;
-    const replies = [
-      'Got it! Let me take a look and get back to you.',
-      'Sounds great — I can start right away.',
-      'Thanks! I\'ll share the first draft tomorrow.',
-      'Perfect, I\'ll keep that in mind. Anything else you need?',
-      'Yes, that works for me. 👍',
-    ];
+    const replies = ['Got it! Let me take a look and get back to you.','Sounds great — I can start right away.','Thanks! I\'ll share the first draft tomorrow.','Perfect, I\'ll keep that in mind. Anything else?','Yes, that works for me. 👍'];
     const reply = replies[Math.floor(Math.random() * replies.length)];
     if (!DB.messages[activeChatBookingId]) DB.messages[activeChatBookingId] = [];
-    DB.messages[activeChatBookingId].push({ id: uid('m'), from: to, to: CURRENT_USER_ID, text: reply, at: Date.now(), read: false });
+    DB.messages[activeChatBookingId].push({ id: uid('m'), from: to, to: CURRENT_USER_ID, text: reply, at: Date.now(), read: true });
     saveDB();
-    if (activeChatBookingId === activeChatBookingId) {
-      // Mark as read since chat is open
-      (DB.messages[activeChatBookingId] || []).forEach(m => { if (m.to === CURRENT_USER_ID) m.read = true; });
-      saveDB();
-      renderChatThread();
-    }
+    renderChatThread();
     renderBadges();
   }, replyDelay);
-
-  // Show typing indicator
   $('#chatTyping').innerHTML = `<span style="opacity:0.7;">${escapeHtml(userById(to)?.name?.split(' ')[0] || 'They')} is typing</span><span class="dots"><span></span><span></span><span></span></span>`;
   setTimeout(() => { if ($('#chatTyping')) $('#chatTyping').innerHTML = ''; }, replyDelay - 200);
 }
 
-/* =========================================================
-   REVIEWS
-   ========================================================= */
+/* REVIEWS */
 let reviewRating = 5;
 function openReview(bookingId) {
   $('#reviewBookingId').value = bookingId;
@@ -1938,19 +1736,14 @@ $('#reviewForm').addEventListener('submit', e => {
   const text = $('#reviewText').value.trim();
   const b = DB.bookings.find(x => x.id === bookingId);
   if (!b || !text) return;
-  DB.reviews.push({
-    id: uid('r'), gigId: b.gigId, bookingId,
-    reviewerId: CURRENT_USER_ID, rating: reviewRating, text, verified: true, createdAt: Date.now()
-  });
+  DB.reviews.push({ id: uid('r'), gigId: b.gigId, bookingId, reviewerId: CURRENT_USER_ID, rating: reviewRating, text, verified: true, createdAt: Date.now() });
   saveDB();
   closeAllModals();
   showToast('Review submitted! ⭐', 'success');
   renderMyBookings();
 });
 
-/* =========================================================
-   PROFILE
-   ========================================================= */
+/* PROFILE */
 function openProfile(userId) {
   const u = userById(userId);
   if (!u) return;
@@ -1959,107 +1752,49 @@ function openProfile(userId) {
   const reviews = DB.reviews.filter(r => gigs.some(g => g.id === r.gigId));
   const badge = creatorBadge(u);
   const badgeLabels = { rising:'🌱 Rising Talent', verified:'✓ Verified Creator', 'top-rated':'⭐ Top Rated' };
-
   $('#profileContent').innerHTML = `
     <div class="profile-header">
       <div class="profile-top">
         ${avatarHTML(u, 'xl')}
         <div class="profile-info">
-          <h1>${escapeHtml(u.name)} ${u.verified ? '<span style="color:var(--blue,#3b82f6); font-size:20px;">✓</span>' : ''}</h1>
+          <h1>${escapeHtml(u.name)} ${u.verified ? '<span style="color:#3b82f6; font-size:20px;">✓</span>' : ''}</h1>
           <div class="tagline">${escapeHtml(u.tagline || 'Creator on Gigly')}</div>
-          <div class="profile-badges">
-            ${badge ? `<span class="badge ${badge}">${badgeLabels[badge]}</span>` : ''}
-            <span class="badge" style="background:var(--panel-3); color: var(--text-dim);">Member since ${new Date(u.joinedAt || Date.now()).toLocaleDateString('en-IN', {month:'short', year:'numeric'})}</span>
-          </div>
+          <div class="profile-badges">${badge ? `<span class="badge ${badge}">${badgeLabels[badge]}</span>` : ''}</div>
           <div class="profile-stats">
             <div class="profile-stat"><div class="num">${gigs.length}</div><div class="lbl">Live gigs</div></div>
             <div class="profile-stat"><div class="num">${u.completed || 0}</div><div class="lbl">Completed</div></div>
             <div class="profile-stat"><div class="num">${stats.avg || '—'} ⭐</div><div class="lbl">${stats.count} reviews</div></div>
-            <div class="profile-stat"><div class="num">~${u.responseHrs || 2}h</div><div class="lbl">Response time</div></div>
-            <div class="profile-stat"><div class="num">${u.onTimePct || 95}%</div><div class="lbl">On-time delivery</div></div>
+            <div class="profile-stat"><div class="num">~${u.responseHrs || 2}h</div><div class="lbl">Response</div></div>
+            <div class="profile-stat"><div class="num">${u.onTimePct || 95}%</div><div class="lbl">On-time</div></div>
           </div>
         </div>
       </div>
     </div>
-
     <h2 style="font-size:18px; font-weight:800; margin-bottom:8px;">Portfolio</h2>
-    <div class="portfolio-grid">
-      ${[1,2,3,4,5,6].map(i => `
-        <div class="portfolio-item" style="background: linear-gradient(${i*40}deg, ${AVATAR_COLORS[i % AVATAR_COLORS.length]}, ${AVATAR_COLORS[(i+3) % AVATAR_COLORS.length]});">
-          <div class="pi-label">Project ${i}</div>
-        </div>
-      `).join('')}
-    </div>
-
+    <div class="portfolio-grid">${[1,2,3,4,5,6].map(i => `<div class="portfolio-item" style="background: linear-gradient(${i*40}deg, ${AVATAR_COLORS[i % AVATAR_COLORS.length]}, ${AVATAR_COLORS[(i+3) % AVATAR_COLORS.length]});"><div class="pi-label">Project ${i}</div></div>`).join('')}</div>
     <h2 style="font-size:18px; font-weight:800; margin: 32px 0 12px;">Gigs by ${escapeHtml(u.name.split(' ')[0])}</h2>
     ${gigs.length ? `<div class="gig-grid">${gigs.map(g => {
       const [c1, c2] = CATEGORY_GRADIENTS[g.category] || ['#8b5cf6','#ec4899'];
-      const s = gigStats(g.id);
-      const stars = '★'.repeat(Math.round(s.avg || 0)) + '☆'.repeat(5 - Math.round(s.avg || 0));
-      return `
-        <div class="gig-card" data-book="${g.id}">
-          <div class="gig-cover" style="background: linear-gradient(135deg, ${c1}, ${c2});">
-            <div class="cover-cat">${g.category.slice(0,2).toUpperCase()}</div>
-          </div>
-          <div class="gig-body">
-            <div class="gig-cat">${g.category}</div>
-            <h3>${escapeHtml(g.title)}</h3>
-            <div class="gig-rating"><span class="stars">${stars}</span>${s.count ? `<span class="num">${s.avg}</span>` : '<span class="count">New</span>'}</div>
-          </div>
-          <div class="gig-footer">
-            <div class="price"><div class="amt">${fmtMoney(g.rate)}</div></div>
-            <button class="btn btn-primary btn-sm" data-book="${g.id}">Book</button>
-          </div>
-        </div>`;
-    }).join('')}</div>` : '<p style="color: var(--muted);">No gigs yet.</p>'}
-
+      return `<div class="gig-card"><div class="gig-cover" style="background: linear-gradient(135deg, ${c1}, ${c2});"><div class="cover-cat">${g.category.slice(0,2).toUpperCase()}</div></div><div class="gig-body"><div class="gig-cat">${g.category}</div><h3>${escapeHtml(g.title)}</h3></div><div class="gig-footer"><div class="price"><div class="amt">${fmtMoney(g.rate)}</div></div><button class="btn btn-primary btn-sm" data-book="${g.id}">Book</button></div></div>`;
+    }).join('')}</div>` : '<p style="color:var(--muted);">No gigs yet.</p>'}
     <h2 style="font-size:18px; font-weight:800; margin: 32px 0 12px;">Reviews (${reviews.length})</h2>
-    <div class="reviews-list">
-      ${reviews.length ? reviews.map(r => {
-        const rev = userById(r.reviewerId);
-        const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
-        return `
-          <div class="review-card">
-            <div class="review-head">
-              ${avatarHTML(rev)}
-              <div>
-                <div class="name">${escapeHtml(rev?.name || 'Anonymous')}</div>
-                <div class="date">${timeAgo(r.createdAt)}</div>
-              </div>
-              ${r.verified ? '<span class="verified-tag">✓ Verified</span>' : ''}
-            </div>
-            <div class="review-stars">${stars}</div>
-            <div class="review-text">${escapeHtml(r.text)}</div>
-          </div>`;
-      }).join('') : '<p style="color: var(--muted);">No reviews yet.</p>'}
-    </div>
-  `;
+    <div class="reviews-list">${reviews.length ? reviews.map(r => {
+      const rev = userById(r.reviewerId);
+      const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+      return `<div class="review-card"><div class="review-head">${avatarHTML(rev)}<div><div class="name">${escapeHtml(rev?.name || 'Anonymous')}</div><div class="date">${timeAgo(r.createdAt)}</div></div>${r.verified ? '<span class="verified-tag">✓ Verified</span>' : ''}</div><div class="review-stars">${stars}</div><div class="review-text">${escapeHtml(r.text)}</div></div>`;
+    }).join('') : '<p style="color:var(--muted);">No reviews yet.</p>'}</div>`;
   go('profile');
-  $$('#profileContent [data-book]').forEach(b => b.addEventListener('click', e => {
-    e.stopPropagation();
-    openBookingModal(b.dataset.book);
-  }));
+  $$('#profileContent [data-book]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); openBookingModal(b.dataset.book); }));
 }
 
-/* =========================================================
-   ACTIVITY
-   ========================================================= */
-function pushActivity(text, hl) {
-  DB.activities.unshift({ id: uid('a'), text, hl, at: Date.now() });
-  DB.activities = DB.activities.slice(0, 30);
-  saveDB();
-}
-
-/* =========================================================
-   PALETTE
-   ========================================================= */
+/* PALETTE */
 const PALETTE_COMMANDS = [
-  { icon:'🔍', title:'Marketplace',      action: () => go('marketplace'), hint:'G M' },
-  { icon:'➕', title:'Post a gig',       action: () => go('post'), hint:'G P' },
+  { icon:'🔍', title:'Marketplace', action: () => go('marketplace'), hint:'G M' },
+  { icon:'➕', title:'Post a gig', action: () => go('post'), hint:'G P' },
   { icon:'📥', title:'Creator Dashboard', action: () => go('dashboard'), hint:'G D' },
-  { icon:'💬', title:'Messages',          action: () => go('messages'), hint:'G C' },
-  { icon:'🎫', title:'My Bookings',       action: () => go('bookings'), hint:'G B' },
-  { icon:'🌗', title:'Toggle theme',      action: () => $('#themeToggle').click() },
+  { icon:'💬', title:'Messages', action: () => go('messages'), hint:'G C' },
+  { icon:'🎫', title:'My Bookings', action: () => go('bookings'), hint:'G B' },
+  { icon:'🌗', title:'Toggle theme', action: () => $('#themeToggle').click() },
 ];
 function openPalette() {
   $('#paletteBackdrop').classList.add('open');
@@ -2078,29 +1813,15 @@ function renderPaletteResults(q) {
     go('marketplace'); showToast(`Now acting as ${u.name.split(' ')[0]}`);
   }}); });
   if (!items.length) { list.innerHTML = `<div class="palette-empty">No matches</div>`; return; }
-  list.innerHTML = items.slice(0, 8).map((it, i) => `
-    <div class="palette-item ${i===0?'active':''}" data-idx="${i}">
-      <div class="p-icon">${it.icon}</div>
-      <div class="p-title">${escapeHtml(it.title)}</div>
-      ${it.hint ? `<span class="p-hint">${escapeHtml(it.hint)}</span>` : ''}
-    </div>`).join('');
-  list.querySelectorAll('.palette-item').forEach((el, i) => {
-    el.addEventListener('click', () => { items[i].action(); $('#paletteBackdrop').classList.remove('open'); });
-  });
+  list.innerHTML = items.slice(0, 8).map((it, i) => `<div class="palette-item ${i===0?'active':''}" data-idx="${i}"><div class="p-icon">${it.icon}</div><div class="p-title">${escapeHtml(it.title)}</div>${it.hint ? `<span class="p-hint">${escapeHtml(it.hint)}</span>` : ''}</div>`).join('');
+  list.querySelectorAll('.palette-item').forEach((el, i) => { el.addEventListener('click', () => { items[i].action(); $('#paletteBackdrop').classList.remove('open'); }); });
   renderPaletteResults._items = items;
 }
 $('#paletteInput').addEventListener('input', e => renderPaletteResults(e.target.value));
-$('#paletteInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') {
-    const items = renderPaletteResults._items || [];
-    if (items[0]) { items[0].action(); $('#paletteBackdrop').classList.remove('open'); }
-  }
-});
+$('#paletteInput').addEventListener('keydown', e => { if (e.key === 'Enter') { const items = renderPaletteResults._items || []; if (items[0]) { items[0].action(); $('#paletteBackdrop').classList.remove('open'); } } });
 $('#paletteBtn').addEventListener('click', openPalette);
 
-/* =========================================================
-   MODAL CLOSE / KEYS
-   ========================================================= */
+/* MODAL / KEYS */
 function closeAllModals() {
   $$('.modal-backdrop').forEach(m => m.classList.remove('open'));
   activeChatBookingId = null;
@@ -2111,23 +1832,13 @@ $$('.modal-backdrop').forEach(bd => bd.addEventListener('click', e => { if (e.ta
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeAllModals();
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openPalette(); }
-  if (e.key === '/' && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) {
-    e.preventDefault();
-    if (!$('.view.active').id.includes('marketplace')) go('marketplace');
-    setTimeout(() => $('#searchInput').focus(), 100);
-  }
+  if (e.key === '/' && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) { e.preventDefault(); if (!$('.view.active').id.includes('marketplace')) go('marketplace'); setTimeout(() => $('#searchInput').focus(), 100); }
 });
 
-/* =========================================================
-   SCROLL
-   ========================================================= */
-window.addEventListener('scroll', () => {
-  $('#topbar').classList.toggle('scrolled', window.scrollY > 10);
-}, { passive: true });
+/* SCROLL */
+window.addEventListener('scroll', () => { $('#topbar').classList.toggle('scrolled', window.scrollY > 10); }, { passive: true });
 
-/* =========================================================
-   CURSOR
-   ========================================================= */
+/* CURSOR */
 (function initCursor() {
   if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
   const layer = $('#cursorLayer'), dot = $('#cursorDot'), halo = $('#cursorHalo'), label = $('#cursorLabel'), trail = $('#cursorTrail'), ripple = $('#clickRippleLayer');
@@ -2137,28 +1848,21 @@ window.addEventListener('scroll', () => {
   document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; layer.classList.add('active'); });
   document.addEventListener('mousedown', e => { pressing = true; layer.classList.add('pressing'); rippleHere(e.clientX, e.clientY); });
   document.addEventListener('mouseup', () => { pressing = false; layer.classList.remove('pressing'); });
-
   const interactive = 'a,button,.btn,.chip,.icon-btn,select,[role="button"],[data-book],[data-accept],[data-decline],[data-chat],[data-deliver],[data-release],[data-review]';
   const cards = '.gig-card,.booking-card,.stat-card,.hero-stat';
   const textF = 'input,textarea';
-  const labelMap = [
-    { sel:'[data-book]', text:'BOOK' }, { sel:'[data-accept]', text:'ACCEPT' }, { sel:'[data-decline]', text:'DECLINE' },
-    { sel:'[data-chat]', text:'CHAT' }, { sel:'.gig-card', text:'VIEW' }, { sel:'.chip', text:'FILTER' },
-  ];
+  const labelMap = [{ sel:'[data-book]', text:'BOOK' }, { sel:'[data-accept]', text:'ACCEPT' }, { sel:'[data-decline]', text:'DECLINE' }, { sel:'[data-chat]', text:'CHAT' }, { sel:'.gig-card', text:'VIEW' }, { sel:'.chip', text:'FILTER' }];
   document.addEventListener('mouseover', e => {
     const t = e.target; if (!t) return;
     layer.classList.remove('hover-interactive','hover-card','text-mode');
     label.classList.remove('visible');
     if (t.matches(textF)) { layer.classList.add('text-mode'); return; }
-    for (const { sel, text } of labelMap) {
-      if (t.matches(sel) || t.closest(sel)) { label.textContent = text; label.classList.add('visible'); break; }
-    }
+    for (const { sel, text } of labelMap) { if (t.matches(sel) || t.closest(sel)) { label.textContent = text; label.classList.add('visible'); break; } }
     if (t.matches(interactive) || t.closest(interactive)) layer.classList.add('hover-interactive');
     else if (t.matches(cards) || t.closest(cards)) layer.classList.add('hover-card');
   });
   document.addEventListener('mouseleave', () => { dot.classList.add('hidden'); halo.classList.add('hidden'); label.classList.remove('visible'); });
   document.addEventListener('mouseenter', () => { dot.classList.remove('hidden'); halo.classList.remove('hidden'); });
-
   function tick() {
     dx += (mx - dx) * 0.55; dy += (my - dy) * 0.55;
     dot.style.transform = `translate3d(${dx}px,${dy}px,0)`;
@@ -2173,7 +1877,6 @@ window.addEventListener('scroll', () => {
     requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
-
   function spark(x, y, vx, vy) {
     const s = document.createElement('div');
     s.className = 'cursor-spark';
@@ -2194,14 +1897,169 @@ window.addEventListener('scroll', () => {
 })();
 
 /* =========================================================
-   BOOT
+   🤖 AI CHATBOT
    ========================================================= */
+(function initChatbot() {
+  const fab = document.getElementById('chatbotFab');
+  const panel = document.getElementById('chatbotPanel');
+  const closeBtn = document.getElementById('chatbotClose');
+  const body = document.getElementById('chatbotBody');
+  const input = document.getElementById('chatbotInput');
+  const form = document.getElementById('chatbotForm');
+  const suggestionsBox = document.getElementById('chatbotSuggestions');
+  if (!fab || !panel) return;
+
+  let greeted = false;
+  let typingEl = null;
+
+  function esc(s) {
+    return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+  }
+
+  function openBot() {
+    panel.classList.add('open');
+    fab.classList.add('open');
+    if (!greeted) { greeted = true; setTimeout(() => greetUser(), 400); }
+    setTimeout(() => input.focus(), 350);
+  }
+  function closeBot() {
+    panel.classList.remove('open');
+    fab.classList.remove('open');
+  }
+
+  fab.addEventListener('click', () => panel.classList.contains('open') ? closeBot() : openBot());
+  closeBtn.addEventListener('click', closeBot);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && panel.classList.contains('open')) closeBot(); });
+
+  function addMessage(text, who = 'bot', html = false) {
+    const el = document.createElement('div');
+    el.className = 'chatbot-msg ' + who;
+    el.innerHTML = html ? text : esc(text).replace(/\n/g, '<br>');
+    body.appendChild(el);
+    body.scrollTop = body.scrollHeight;
+    return el;
+  }
+
+  function showTyping() {
+    typingEl = document.createElement('div');
+    typingEl.className = 'chatbot-msg bot typing';
+    typingEl.innerHTML = '<span></span><span></span><span></span>';
+    body.appendChild(typingEl);
+    body.scrollTop = body.scrollHeight;
+  }
+  function hideTyping() { if (typingEl) { typingEl.remove(); typingEl = null; } }
+
+  function botReply(text, html = false, chips = null) {
+    showTyping();
+    const delay = Math.min(1400, 500 + text.length * 6);
+    return new Promise(resolve => {
+      setTimeout(() => {
+        hideTyping();
+        addMessage(text, 'bot', html);
+        renderChips(chips);
+        resolve();
+      }, delay);
+    });
+  }
+
+  function renderChips(chips) {
+    if (!chips || !chips.length) { suggestionsBox.innerHTML = ''; return; }
+    suggestionsBox.innerHTML = chips.map(c => `<button type="button" class="chatbot-chip" data-chip="${esc(c)}">${esc(c)}</button>`).join('');
+    suggestionsBox.querySelectorAll('.chatbot-chip').forEach(ch => {
+      ch.addEventListener('click', () => {
+        input.value = ch.dataset.chip;
+        form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+      });
+    });
+  }
+
+  function greetUser() {
+    let first = 'there', role = 'user';
+    try {
+      if (typeof userById === 'function' && typeof CURRENT_USER_ID !== 'undefined') {
+        const me = userById(CURRENT_USER_ID);
+        if (me) { first = me.name.split(' ')[0]; role = me.role; }
+      }
+    } catch(e) {}
+    addMessage(`Hi <strong>${first}</strong>! 👋 I'm <strong>Gigly AI</strong> — I can help you ${role === 'creator' ? 'post gigs, manage bookings, and price your services' : 'find creators, book gigs, and use our AI features'}. What would you like to know?`, 'bot', true);
+    renderChips(role === 'creator'
+      ? ['How do I post a gig?', 'How does price suggester work?', 'How do I accept a booking?', 'What is escrow?']
+      : ['How do I book a gig?', 'What is AI Match?', 'How does escrow work?', 'How do reviews work?']);
+  }
+
+  const KB = [
+    { keys: ['hi','hello','hey','yo','sup','namaste'], reply: "Hey! 👋 Ask me anything about Gigly — posting, booking, pricing, escrow, AI features, or reviews." },
+    { keys: ['post','publish','list','create a gig','add a gig','new gig'], reply: "To post a gig:\n1. Click <strong>Post a Gig</strong>\n2. Enter a title (start with 'I will…')\n3. Pick a category\n4. Write a description — the <strong>AI Price Suggester</strong> appears\n5. Enter your rate, optionally add a video URL\n6. Click <strong>Publish Gig</strong>", html: true },
+    { keys: ['book','hire','order','request','buy'], reply: "To book a creator:\n1. Go to <strong>Marketplace</strong>\n2. Click <strong>Book</strong> on any gig\n3. Add your name + message (or click <strong>AI Draft</strong>)\n4. Click <strong>Send Booking Request</strong>\n5. Track it in <strong>My Bookings</strong>", html: true },
+    { keys: ['ai match','ai search','smart search','match me','find gig'], reply: "<strong>AI Match</strong> is our smart search — the purple box at the top of the Marketplace. Try typing:\n\n<i>\"I need a logo for my coffee shop under ₹2000\"</i>\n\nIt ranks the best gigs, detects your budget, and suggests matches you can book in one click.", html: true },
+    { keys: ['ai draft','draft message','auto message','write message'], reply: "<strong>AI Draft</strong> writes your booking message for you. Open any gig → click <strong>Book</strong> → click <strong>AI Draft</strong> next to the message field. Edit before sending.", html: true },
+    { keys: ['price','suggest','pricing','rate','how much','cost'], reply: "Our <strong>AI Price Suggester</strong> analyzes your description and shows a suggested price range. Start typing on the Post a Gig page — the suggestion appears automatically.", html: true },
+    { keys: ['escrow','payment','money','pay','milestone','release'], reply: "We use <strong>escrow milestones</strong>:\n1. Client books\n2. Creator accepts → <strong>50% held in escrow</strong>\n3. Creator marks delivered\n4. Client releases → <strong>final 50% paid out</strong>\n\nThe 5-step bar on every booking shows where you are.", html: true },
+    { keys: ['chat','message','talk','contact','reply'], reply: "Every booking has its own <strong>chat thread</strong>. Click <strong>💬 Chat</strong> on any booking card, or open the <strong>Messages</strong> tab. You'll see typing indicators and ✓✓ read receipts.", html: true },
+    { keys: ['review','rating','star','feedback'], reply: "After a booking completes, the client can leave a <strong>review with stars</strong>. Reviews appear on the creator's profile and gig cards.", html: true },
+    { keys: ['badge','verified','top rated','rising','trust'], reply: "We have 3 tiers:\n• <strong>🌱 Rising</strong> — new creators\n• <strong>✓ Verified</strong> — ID-verified\n• <strong>⭐ Top Rated</strong> — avg 4.8★ with 3+ reviews", html: true },
+    { keys: ['portfolio','profile','past work','gallery'], reply: "Every creator has a <strong>profile page</strong> with a portfolio gallery, past gigs, ratings, and reviews. Click any creator's avatar to view it.", html: true },
+    { keys: ['video','intro video','15 sec','intro'], reply: "Creators can add a <strong>15-second intro video</strong> when posting a gig. Look for the ▶️ play button on gig cards.", html: true },
+    { keys: ['decline','reject','rejection','refuse'], reply: "When a creator declines, the client sees a <strong>red 'Declined' badge</strong>, their message, and a <strong>'Find similar gigs'</strong> button that jumps back to the marketplace filtered to the same category.", html: true },
+    { keys: ['double booking','two bookings','multiple bookings'], reply: "Multiple pending bookings can exist on one gig, but <strong>only one can be Accepted</strong>. The moment a creator accepts, all other pendings auto-decline.", html: true },
+    { keys: ['ranking','sort','order','discovery'], reply: "Default sort is <strong>newest first</strong>, with a <strong>Rising Creator boost</strong>. Clients can override via the dropdown: Newest · Top rated · Price ↑ · Price ↓", html: true },
+    { keys: ['theme','dark mode','light mode','color'], reply: "Click the <strong>🌙 / ☀️ icon</strong> in the top-right to toggle dark/light mode.", html: true },
+    { keys: ['shortcut','keyboard','ctrl','hotkey'], reply: "Keyboard shortcuts:\n• <strong>Ctrl+K</strong> → command palette\n• <strong>/</strong> → focus search\n• <strong>Esc</strong> → close modals", html: true },
+    { keys: ['who am i','my role','my account','acting as'], reply: () => {
+        try { if (typeof userById === 'function' && typeof CURRENT_USER_ID !== 'undefined') { const me = userById(CURRENT_USER_ID); if (me) return `You're acting as <strong>${me.name}</strong> (${me.role}). Switch users from the top-right dropdown.`; } } catch(e) {}
+        return "You're browsing as a guest.";
+      }, html: true },
+    { keys: ['help','what can you do','how','guide','tutorial','demo'], reply: "Here's what I can help with:\n• 📝 Posting gigs & pricing\n• 🎯 AI Match & AI Draft\n• 💬 Chat & reviews\n• 💰 Escrow payments\n• 🏆 Badges & profiles\n\nJust ask!", html: true },
+    { keys: ['thank','thanks','thx','ty'], reply: "You're welcome! 🙌 Anything else?" },
+    { keys: ['bye','goodbye','see you','later','cya'], reply: "See you around! Come back anytime. 👋" },
+  ];
+
+  function getReply(q) {
+    const text = q.toLowerCase().trim();
+    if (!text) return null;
+    let best = null, bestScore = 0;
+    for (const entry of KB) {
+      let score = 0;
+      for (const k of entry.keys) if (text.includes(k)) score += k.length;
+      if (score > bestScore) { bestScore = score; best = entry; }
+    }
+    if (!best) return null;
+    const reply = typeof best.reply === 'function' ? best.reply() : best.reply;
+    return { text: reply, html: !!best.html };
+  }
+
+  function getFollowUpChips(prevQ) {
+    const q = prevQ.toLowerCase();
+    if (q.includes('book')) return ['What is AI Match?', 'How does escrow work?'];
+    if (q.includes('post') || q.includes('gig')) return ['How does price suggester work?', 'How do badges work?'];
+    if (q.includes('escrow') || q.includes('payment')) return ['How do I chat with the creator?', 'How do reviews work?'];
+    if (q.includes('review') || q.includes('badge')) return ['How do profiles work?', 'How does escrow work?'];
+    return ['help', 'Book a gig', 'Post a gig'];
+  }
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const q = input.value.trim();
+    if (!q) return;
+    addMessage(q, 'me');
+    input.value = '';
+    renderChips([]);
+    await new Promise(r => setTimeout(r, 200));
+    const answer = getReply(q);
+    if (answer) {
+      await botReply(answer.text, answer.html, getFollowUpChips(q));
+    } else {
+      await botReply(`Hmm, I'm not sure about that one. 🤔 Try asking about:\n\n• Posting gigs\n• Booking a creator\n• AI Match or AI Draft\n• Escrow payments\n• Reviews and badges\n\nOr type <strong>"help"</strong> for the full list.`, true, ['help', 'How do I book?', 'What is AI Match?', 'How does escrow work?']);
+    }
+  });
+})();
+
+/* BOOT */
 renderUserSelect();
 renderPostForm();
 renderBadges();
 renderMarketplace();
 
-// Live refresh across tabs
 window.addEventListener('storage', e => {
   if (e.key === DB_KEY) {
     DB = JSON.parse(e.newValue || '{}');
